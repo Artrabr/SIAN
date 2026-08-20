@@ -1,0 +1,3 @@
+pscnewcandidate -> sistema de candidatura finalizado;
+
+pcs_newAthlete.php -> sistema de credenciamento finalizado; 
