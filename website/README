@@ -1,0 +1,53 @@
+# Template Web - NOIA Vôlei & Sistema SIAN
+
+Este repositório contém o template frontend oficial do **NOIA Vôlei**, estruturado em arquivo `.php` para facilitar a integração imediata com o backend. O layout foi pensado para oferecer uma experiência premium aos torcedores, atletas e clientes B2B, com design moderno e seções estrategicamente posicionadas.
+
+## 🎨 Identidade Visual e UI/UX
+
+*   **Paleta de Cores Escura (Dark Mode):** O layout é predominantemente escuro (Preto e Cinza Escuro), garantindo conforto visual. Textos em branco para alta legibilidade.
+*   **Detalhes em Ciano (Cyan):** A cor Ciano foi utilizada de forma estratégica em bordas, barras de destaque e botões, trazendo um aspecto moderno e vibrante sem poluir a interface.
+*   **Espaços para Logos e Brasões:** Em áreas essenciais (Header, Hero Banner, Seção de Partidas e Rodapé), foram deixadas caixas vazadas com contornos em ciano. Estas áreas possuem comentários no código explicando as classes corretas para a inserção das imagens finais.
+
+## 🗺️ Navegação e Estrutura
+
+O menu principal foi desenhado para conversão e fácil acesso às áreas vitais:
+*   **Início:** Página principal.
+*   **Equipes:** Visão geral das categorias e times.
+*   **Quero Participar:** Informações e formulários de peneiras.
+*   **SIAN:** Link com um "badge" visual em destaque para a plataforma.
+*   **Login / Entrar:** Acesso à Área do Cliente.
+
+## 💻 Integração Backend (PHP Pronto)
+
+Para facilitar a vida dos desenvolvedores backend, o código conta com blocos de comentários bem visíveis (`<?php // ESPAÇO PHP ?>`) indicando os pontos exatos de injeção de lógica:
+
+1.  **Próximo Jogo:** Espaço para carregar os dados da próxima partida da equipe.
+2.  **Últimas Notícias:** Loop estruturado para listagem dinâmica das notícias.
+3.  **Elenco (Roster):** Área para puxar e listar os dados e fotos dos atletas.
+4.  **Formulário de Peneiras:** Ponto de processamento dos dados enviados (POST).
+5.  **Autenticação:** Área de verificação de sessão (`session_start`) para o controle de Login.
+
+## ⚙️ Módulo SIAN (Business-to-Business)
+
+O template possui uma seção dedicada exclusivamente ao **Sistema SIAN**, destacando-o como o software oficial de gestão do NOIA Vôlei.
+*   **Foco B2B:** Inclui caixas de destaque e botões de "Call to Action" voltados para a comercialização da plataforma para outras empresas, clubes e academias.
+
+## 🔒 Área do Cliente (Dashboard Pós-Login)
+
+O template vai além do site institucional e inclui uma simulação de **Área do Cliente**:
+*   **Tela de Login:** Interface limpa para acesso ao sistema.
+*   **Painel do Atleta/Cliente SIAN:** Um Dashboard objetivo que apresenta:
+    *   Frequência e presença nos treinos.
+    *   Situação financeira (mensalidades).
+    *   Agenda do atleta.
+    *   **Ações Rápidas:** Botões para emissão de relatórios completos e documentos financeiros.
+
+---
+
+### 🚀 Como testar e utilizar
+
+1.  Como o arquivo possui a extensão `.php`, é necessário rodá-lo em um servidor local (como XAMPP, WAMP, Laragon, ou Docker) ou hospedá-lo no seu servidor de testes web.
+2.  Abra o arquivo principal em seu editor de código e busque por `<?php // ESPAÇO PHP ?>` para iniciar a conexão com o seu banco de dados e APIs do SIAN.
+3.  Substitua as imagens nas "caixas vazadas" utilizando as classes CSS documentadas no próprio arquivo.
+
+> **Nota de Manutenção:** Caso necessite de ajustes na paleta de cores, alteração na disposição das seções ou adição de novas páginas, sinta-se à vontade para editar o CSS incluso ou solicitar alterações estruturais na base deste template.
