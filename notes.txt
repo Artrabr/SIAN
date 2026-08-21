@@ -1,3 +1,10 @@
 pscnewcandidate -> sistema de candidatura finalizado;
 
 pcs_newAthlete.php -> sistema de credenciamento finalizado; 
+
+bug de altura heigth finalizado e testado
+-------------------
+fazer =>
+2. Criar sistema de login pra sian 
+3. Nexar noticias na web
+4. lista de candidatos na sian

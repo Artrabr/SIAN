@@ -22,7 +22,7 @@
         </section>
 
         <section class="action-grid">
-            <a href="cadastrar_jogador.php" class="action-card primary">
+            <a href="registration.php" class="action-card primary">
                 <strong>Novo atleta</strong>
                 <span>Cadastre um jogador rapidamente.</span>
             </a>
@@ -36,7 +36,7 @@
     <nav class="bottom-nav">
         <a href="home.php" class="active">Início</a>
         <a href="lists.php">Listas</a>
-        <a href="cadastrar_jogador.php">Cadastrar</a>
+        <a href="registration.php">Cadastrar</a>
     </nav>
 </body>
 </html>

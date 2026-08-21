@@ -1,3 +1,47 @@
+<?php
+require_once __DIR__ . "/../backend/data/conection.php";
+
+$pdo = conection::conectar();
+
+// Busca os valores de gênero que realmente existem na tabela,
+// assim o filtro se adapta ao que estiver salvo no banco (ex: Masculino/Feminino).
+$generosStmt = $pdo->query("SELECT DISTINCT gender_atl FROM athlete ORDER BY gender_atl");
+$generosDisponiveis = $generosStmt->fetchAll(PDO::FETCH_COLUMN);
+
+// Lê o filtro vindo da URL (?gender=Feminino) e só aceita valores que
+// realmente existem no banco, evitando qualquer valor arbitrário.
+$filtroGenero = $_GET['gender'] ?? '';
+$filtroGenero = in_array($filtroGenero, $generosDisponiveis, true) ? $filtroGenero : '';
+
+$sql = "SELECT a.id_atl AS id, a.name_atl AS name, a.contact_atl AS contact,
+               a.birthDate_atl AS birth, a.position_atl AS position,
+               a.city_atl AS city, a.team_atl AS team, a.gender_atl AS gender,
+               EXISTS (
+                   SELECT 1 FROM payments p WHERE p.atl_id = a.id_atl
+               ) AS paid
+        FROM athlete a";
+
+if ($filtroGenero !== '') {
+    $sql .= " WHERE a.gender_atl = :gender";
+}
+
+$sql .= " ORDER BY a.name_atl";
+
+$stmt = $pdo->prepare($sql);
+if ($filtroGenero !== '') {
+    $stmt->bindValue(':gender', $filtroGenero);
+}
+$stmt->execute();
+$atletas = $stmt->fetchAll();
+
+function idadeDoAtleta($birth) {
+    try {
+        return (new DateTime($birth))->diff(new DateTime())->y;
+    } catch (Exception $exception) {
+        return '-';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,83 +65,34 @@
             <p>Toque em qualquer card para ver todos os detalhes e o status de mensalidade.</p>
         </section>
 
+        <section class="filter-bar">
+            <a href="lists.php" class="filter-chip <?= $filtroGenero === '' ? 'active' : '' ?>">
+                Todos
+            </a>
+            <?php foreach ($generosDisponiveis as $genero): ?>
+                <a href="lists.php?gender=<?= urlencode($genero) ?>"
+                   class="filter-chip <?= $filtroGenero === $genero ? 'active' : '' ?>">
+                    <?= htmlspecialchars($genero) ?>
+                </a>
+            <?php endforeach; ?>
+        </section>
+
         <section class="list-stack">
             <?php
-            $arquivo = "../backend/data/DataAthlete.csv";
-
-            function resetStatusMensalidade($arquivo) {
-                if (date('j') !== '1') {
-                    return;
+                if (empty($atletas)) {
+                    echo '<p class="empty-state">Nenhum atleta encontrado para esse filtro.</p>';
                 }
-
-                if (!file_exists($arquivo)) {
-                    return;
-                }
-
-                $linhas = [];
-                if (($handle = fopen($arquivo, 'r')) !== false) {
-                    while (($dados = fgetcsv($handle, 1000, ',')) !== false) {
-                        $linhas[] = $dados;
-                    }
-                    fclose($handle);
-                }
-
-                if (count($linhas) <= 1) {
-                    return;
-                }
-
-                $cabecalho = array_shift($linhas);
-                $alterado = false;
-
-                foreach ($linhas as &$linha) {
-                    if (isset($linha[6]) && strtolower($linha[6]) === 'true') {
-                        $linha[6] = 'false';
-                        $alterado = true;
-                    }
-                }
-
-                if ($alterado && ($handle = fopen($arquivo, 'w')) !== false) {
-                    fputcsv($handle, $cabecalho);
-                    foreach ($linhas as $linha) {
-                        fputcsv($handle, $linha);
-                    }
-                    fclose($handle);
-                }
-            }
-
-            resetStatusMensalidade($arquivo);
-
-            if (!file_exists($arquivo)) {
-                echo "<p class='empty-state'>CSV não encontrado.</p>";
-            } else {
-                $handle = fopen($arquivo, "r");
-                $cabecalho = fgetcsv($handle, 1000, ",");
-                $atletas = [];
-
-                while (($linha = fgetcsv($handle, 1000, ",")) !== false) {
-                    $registro = [];
-
-                    foreach ($cabecalho as $index => $nomeCampo) {
-                        $registro[$nomeCampo] = $linha[$index] ?? '';
-                    }
-
-                    if (!isset($registro['paid']) || $registro['paid'] === '') {
-                        $registro['paid'] = 'false';
-                    }
-
-                    $atletas[] = $registro;
-                }
-
-                fclose($handle);
 
                 foreach ($atletas as $atleta) {
                     $id = (int) ($atleta['id'] ?? 0);
                     $nome = htmlspecialchars($atleta['name'] ?? 'Sem nome');
-                    $idade = htmlspecialchars($atleta['age'] ?? '-');
+                    $idade = htmlspecialchars((string) idadeDoAtleta($atleta['birth'] ?? ''));
                     $nascimento = htmlspecialchars($atleta['birth'] ?? '-');
-                    $esporte = htmlspecialchars(ucfirst($atleta['sport'] ?? '-'));
                     $posicao = htmlspecialchars(ucfirst($atleta['position'] ?? '-'));
-                    $pago = strtolower($atleta['paid'] ?? 'false') === 'true';
+                    $cidade = htmlspecialchars($atleta['city'] ?? '-');
+                    $equipe = htmlspecialchars($atleta['team'] ?? '-');
+                    $genero = htmlspecialchars($atleta['gender'] ?? '-');
+                    $pago = (bool) $atleta['paid'];
                     $statusTexto = $pago ? 'Pago' : 'Pendente';
                     $statusClasse = $pago ? 'paid' : 'pending';
                     $cardId = 'card-' . $id;
@@ -115,8 +110,8 @@
                             </div>
                             <div class="summary-meta">
                                 <span><?= $idade ?> anos</span>
-                                <span><?= $esporte ?></span>
                                 <span><?= $posicao ?></span>
+                                <span><?= $equipe ?></span>
                             </div>
                         </label>
 
@@ -141,6 +136,10 @@
                                     <strong><?= $nome ?></strong>
                                 </div>
                                 <div>
+                                    <span>Gênero</span>
+                                    <strong><?= $genero ?></strong>
+                                </div>
+                                <div>
                                     <span>Idade</span>
                                     <strong><?= $idade ?> anos</strong>
                                 </div>
@@ -149,12 +148,20 @@
                                     <strong><?= $nascimento ?></strong>
                                 </div>
                                 <div>
-                                    <span>Esporte</span>
-                                    <strong><?= $esporte ?></strong>
-                                </div>
-                                <div>
                                     <span>Posição</span>
                                     <strong><?= $posicao ?></strong>
+                                </div>
+                                <div>
+                                    <span>Contato</span>
+                                    <strong><?= htmlspecialchars($atleta['contact'] ?? '-') ?></strong>
+                                </div>
+                                <div>
+                                    <span>Cidade</span>
+                                    <strong><?= $cidade ?></strong>
+                                </div>
+                                <div>
+                                    <span>Equipe</span>
+                                    <strong><?= $equipe ?></strong>
                                 </div>
                                 <div>
                                     <span>Mensalidade</span>
@@ -183,7 +190,6 @@
                     </div>
                     <?php
                 }
-            }
             ?>
         </section>
 
@@ -193,7 +199,7 @@
     <nav class="bottom-nav">
         <a href="home.php">Início</a>
         <a href="lists.php" class="active">Listas</a>
-        <a href="cadastrar_jogador.php">Cadastrar</a>
+        <a href="registration.php">Cadastrar</a>
     </nav>
 </body>
 </html>
