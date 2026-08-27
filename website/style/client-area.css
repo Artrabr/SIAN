@@ -1,0 +1,453 @@
+:root {
+    --client-text-main: #fff;
+}
+
+body.client-page {
+    background: radial-gradient(circle at 85% 5%, rgba(0, 229, 255, 0.1), transparent 32%), var(--bg-dark);
+}
+
+.client-main {
+    min-height: calc(100vh - 130px);
+    padding: 120px 0 100px;
+}
+
+.client-page header .nav-container {
+    min-height: 79px;
+}
+
+.client-page .crest-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.client-page .crest-header .logo-size01 {
+    width: auto;
+    height: 55px;
+}
+
+.client-page .brand-text {
+    color: var(--client-text-main);
+}
+
+.client-page .section-title {
+    color: var(--client-text-main);
+}
+
+.client-page .profile-card h3,
+.client-page .teammate-card h3,
+.client-page .table-wrap h3 {
+    color: var(--client-text-main);
+}
+
+.client-welcome {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.client-welcome h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--client-text-main);
+    text-transform: uppercase;
+    line-height: 1.1;
+}
+
+.eyebrow {
+    color: var(--cyan-accent);
+    font-family: var(--font-heading);
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.client-status {
+    color: #86efac;
+    font-size: .8rem;
+    white-space: nowrap;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 10px rgba(74, 222, 128, .8);
+    margin-right: 6px;
+}
+
+.client-tabs {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    z-index: 1001;
+    display: flex;
+    width: min(100%, 680px);
+    transform: translateX(-50%);
+    background: rgba(11, 13, 16, .97);
+    border: 1px solid var(--border-color);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -8px 25px rgba(0, 0, 0, .35);
+    overflow: hidden;
+}
+
+.client-tab {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: transparent;
+    color: var(--text-muted);
+    border: 0;
+    border-top: 2px solid transparent;
+    padding: 14px 10px 12px;
+    font-family: var(--font-heading);
+    font-size: .78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.client-tab:hover,
+.client-tab.active {
+    color: var(--cyan-accent);
+    border-top-color: var(--cyan-accent);
+}
+
+.client-tab span:first-child {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.client-tab span:last-child {
+    white-space: nowrap;
+}
+
+.client-panel[hidden] {
+    display: none;
+}
+
+.client-panel.active {
+    animation: panel-in .35s ease both;
+}
+
+@keyframes panel-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.compact-header {
+    margin-bottom: 24px;
+}
+
+.client-card {
+    height: 100%;
+    background: rgba(20, 24, 32, .9);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 22px;
+}
+
+.client-card:hover {
+    border-color: var(--border-cyan);
+}
+
+.metric-card {
+    min-height: 155px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-label,
+.card-note,
+.profile-role,
+.teammate-card span {
+    color: var(--text-muted);
+    font-size: .85rem;
+}
+
+.card-note {
+    font-size: .78rem;
+}
+
+.metric-value {
+    color: var(--cyan-accent);
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.metric-team {
+    font-size: 1.15rem;
+}
+
+.status-paid,
+.payment-status {
+    color: #4ade80;
+}
+
+.profile-card {
+    text-align: center;
+}
+
+.profile-photo,
+.teammate-photo {
+    object-fit: contain;
+    background: #0d1017;
+    border: 1px solid var(--border-cyan);
+}
+
+.profile-photo {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    padding: 12px;
+    margin-bottom: 18px;
+}
+
+.profile-card h3,
+.teammate-card h3,
+.table-wrap h3 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+}
+
+.profile-card h3 {
+    font-size: 1.2rem;
+}
+
+.profile-role {
+    margin: 5px 0 0;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.detail-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-line span {
+    color: var(--text-muted);
+}
+
+.detail-line strong {
+    text-align: right;
+}
+
+.password-button {
+    align-self: flex-start;
+    margin-top: 22px;
+}
+
+.teammate-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+}
+
+.teammate-photo {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    padding: 6px;
+    flex: 0 0 auto;
+}
+
+.teammate-card h3 {
+    font-size: .95rem;
+    margin-bottom: 3px;
+}
+
+.teammate-card span {
+    font-size: .75rem;
+}
+
+.payment-options {
+    margin-bottom: 35px;
+}
+
+.payment-action {
+    min-height: 86px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    color: var(--text-main);
+    text-decoration: none;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.payment-action:hover,
+.primary-action {
+    border-color: var(--cyan-accent);
+    box-shadow: 0 0 18px var(--cyan-glow);
+}
+
+.payment-action > span:nth-child(2) {
+    flex: 1;
+}
+
+.payment-action strong,
+.payment-action small {
+    display: block;
+}
+
+.payment-action strong {
+    font-family: var(--font-heading);
+    font-size: .9rem;
+    text-transform: uppercase;
+}
+
+.payment-action small {
+    color: var(--text-muted);
+    font-size: .76rem;
+    margin-top: 4px;
+}
+
+.payment-icon {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    color: #000;
+    background: var(--cyan-accent);
+    border-radius: 50%;
+    font-family: var(--font-heading);
+    font-size: .72rem;
+    font-weight: 900;
+}
+
+.table-wrap {
+    background: rgba(20, 24, 32, .9);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 22px;
+}
+
+.table-wrap h3 {
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+}
+
+.finance-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-main);
+    font-size: .88rem;
+}
+
+.finance-table th,
+.finance-table td {
+    padding: 13px 8px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.finance-table th {
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    font-size: .72rem;
+    text-transform: uppercase;
+}
+
+.finance-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.payment-status {
+    font-weight: 700;
+}
+
+.client-footer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-dim);
+    font-size: .8rem;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .client-main {
+        padding: 105px 0 105px;
+    }
+
+    .client-welcome {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .client-nav-menu {
+        display: none;
+    }
+
+    .client-page .nav-container {
+        padding: 8px 15px;
+    }
+
+    .client-page .brand {
+        gap: 9px;
+    }
+
+    .client-page .brand-text {
+        font-size: 1.05rem;
+    }
+
+    .client-page .crest-header {
+        width: 45px;
+        height: 45px;
+    }
+
+    .client-page .crest-header .logo-size01 {
+        height: 45px;
+    }
+
+    .client-tabs {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .client-tab {
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 4px 9px;
+        font-size: .62rem;
+    }
+
+    .client-tab span:first-child {
+        font-size: 1.1rem;
+    }
+
+    .detail-line {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .detail-line strong {
+        text-align: left;
+    }
+}

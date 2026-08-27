@@ -1,0 +1,131 @@
+pscnewcandidate -> sistema de candidatura finalizado;
+
+pcs_newAthlete.php -> sistema de credenciamento finalizado; 
+
+bug de altura heigth finalizado e testado
+-------------------
+fazer =>
+2. Criar sistema de login pra sian 
+3. Nexar noticias na web
+4. lista de candidatos na sian
+
+
+
+
+
+elementos de ia 
+
+
+
+CHECKLIST DE AMANHA - SIAN / NOIA VOLEI
+========================================
+
+1. CONFERIR O BANCO DE DADOS
+-----------------------------
+- Abrir o phpMyAdmin e confirmar a estrutura das tabelas.
+- Conferir se os nomes das colunas usados no PHP sao os mesmos do banco.
+- Existe uma diferenca atual no projeto:
+  - Alguns arquivos usam name_atl, position_atl, city_atl e hight_atl.
+  - O processador de candidatura atual usa name_cdt, gender_cdt, contact_cdt,
+    birthDate_cdt, position_cdt, city_cdt, hight_cdt e instagram_cdt.
+- Escolher um padrao e deixar o banco e todos os arquivos iguais.
+- Nao informar o ID no INSERT. O AUTO_INCREMENT do banco deve gerar o ID.
+
+2. TESTAR A CONEXAO
+-------------------
+Arquivo: backsistem/backend/data/conection.php
+
+- Confirmar banco: sian.
+- Confirmar usuario, senha e servidor do MySQL.
+- A conexao ja usa PDO e modo de erro por excecao.
+- Fazer um teste simples com SELECT 1 para garantir que o MySQL esta ligado.
+
+3. CORRIGIR E TESTAR A CANDIDATURA
+-----------------------------------
+Arquivo: backsistem/backend/process/website/psc_newCandidate.php
+
+- Conferir se o INSERT usa exatamente as colunas existentes na tabela candidates.
+- Conferir se todos os campos do formulario existem no PHP:
+  name, gender, contact, birthDate, position, city, hight e instagram.
+- Confirmar que a altura esta no formato aceito pela coluna DECIMAL.
+  Exemplo: 1.86 se a coluna for DECIMAL(3,2).
+- Enviar uma candidatura de teste e verificar se ela aparece no banco.
+
+4. PREPARAR O LOGIN
+--------------------
+- Criar ou confirmar uma tabela de usuarios/atletas com login e senha.
+- Usar password_hash() para salvar a senha.
+- Usar password_verify() para conferir a senha.
+- Iniciar a sessao com session_start().
+- Depois do login, salvar o ID do atleta:
+  $_SESSION['id_atleta'] = $idDoAtleta;
+- Redirecionar o atleta para website/clientArea.php.
+
+5. CONECTAR A AREA DO CLIENTE
+------------------------------
+Arquivo: website/clientArea.php
+
+- Remover os dados de teste do inicio do arquivo.
+- Incluir a conexao:
+  require_once __DIR__ . '/../backsistem/backend/data/conection.php';
+- Iniciar a sessao e verificar se existe $_SESSION['id_atleta'].
+- Buscar o atleta pelo ID da sessao com SELECT e PDO prepare().
+- Preencher a variavel $atleta com os dados retornados.
+- Se o atleta nao existir ou nao estiver logado, redirecionar para o login.
+
+6. BUSCAR A EQUIPE
+-------------------
+- Criar um SELECT para buscar os atletas da mesma equipe.
+- Preencher a variavel $equipe com os resultados.
+- Manter cada item com nome, posicao e foto para o HTML atual funcionar.
+
+7. BUSCAR PAGAMENTOS
+---------------------
+- Criar ou confirmar a tabela de pagamentos.
+- Buscar os pagamentos usando o ID do atleta logado.
+- Preencher $relatorioFinanceiro com data, tipo e status.
+- Calcular o status financeiro do mes a partir dos dados reais.
+- Para ocultar mensalidade depois do dia 5, usar:
+  $podePagarMensalidade = (int) date('j') <= 5;
+
+8. PROXIMO TREINO
+------------------
+- Criar ou confirmar a tabela de treinos.
+- Buscar o proximo treino da equipe do atleta.
+- Substituir o texto fixo de proximo_treino pelos dados do banco.
+
+9. WHATSAPP
+-----------
+- Trocar o numero de teste em $numeroWhatsApp pelo numero real.
+- Manter rawurlencode() na mensagem para acentos e espacos funcionarem.
+- Conferir se a mensagem mostra o nome do atleta e a equipe correta.
+
+10. TESTE FINAL
+---------------
+- Testar login com usuario correto.
+- Testar login com senha errada.
+- Testar acesso direto a clientArea.php sem estar logado.
+- Testar candidatura preenchida e candidatura incompleta.
+- Conferir os registros no phpMyAdmin.
+- Executar a validacao PHP nos arquivos alterados:
+  C:\xampp\php\php.exe -l caminho\arquivo.php
+
+ARQUIVOS PRINCIPAIS
+====================
+- website/clientArea.php       Area do cliente e dados temporarios.
+- website/style/client-area.css Estilos e responsividade.
+- website/index.php             Formulario de candidatura.
+- backsistem/backend/data/conection.php
+                                Conexao PDO com o banco.
+- backsistem/backend/process/website/psc_newCandidate.php
+                                Processamento da candidatura.
+
+ORDEM RECOMENDADA
+=================
+1. Padronizar nomes das colunas.
+2. Testar a conexao PDO.
+3. Fazer candidatura entrar no banco.
+4. Fazer login criar a sessao.
+5. Buscar o atleta logado na clientArea.php.
+6. Buscar equipe, pagamentos e treino.
+7. Fazer os testes finais.

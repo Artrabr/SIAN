@@ -1,0 +1,40 @@
+[========================banco-de-dados========================]
+
+CREATE DATABASE sian;
+USE sian;
+
+CREATE TABLE candidates (
+    id_cdt INT PRIMARY KEY AUTO_INCREMENT,
+    name_cdt VARCHAR(100) NOT NULL,
+    gender_cdt VARCHAR(12) NOT NULL,
+    contact_cdt VARCHAR(20) NOT NULL,
+    birthDate_cdt DATE NOT NULL,
+    hight_cdt DECIMAL(3,2) NOT NULL,	
+    position_cdt VARCHAR(150),
+    city_cdt VARCHAR(100),
+    instagram_cdt VARCHAR(50)
+);
+
+CREATE TABLE athlete (
+    id_atl INT PRIMARY KEY AUTO_INCREMENT,
+    name_atl VARCHAR(100) NOT NULL,
+    contact_atl VARCHAR(100) NOT NULL,
+    birthDate_atl DATE NOT NULL,
+    position_atl VARCHAR(150) NOT NULL,
+    city_atl VARCHAR(100) NOT NULL,
+    hight_atl DECIMAL(3,2) NOT NULL,
+    instagram_atl VARCHAR(100) NOT NULL,
+    cpf_atl VARCHAR(14) NOT NULL,
+    payMethod_atl VARCHAR(50) NOT NULL,
+    gender_atl VARCHAR(20) NOT NULL,
+    team_atl VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE payments (
+    pgm_id INT PRIMARY KEY AUTO_INCREMENT,
+    payday DATE NOT NULL,
+    expired DATE NOT NULL,
+    atl_id INT NOT NULL,
+    FOREIGN KEY (atl_id) REFERENCES athlete(id_atl)
+);
