@@ -28,7 +28,7 @@
             </select>
 
             <label for="hight">Altura (cm):</label>
-            <input type="number" name="hight" id="hight" min="100" max="250" step="1" required placeholder="ex: 188">
+            <input type="number" name="hight" id="hight" required placeholder="ex: 188">
 
             <label for="cpf">CPF:</label>
             <input type="text" name="cpf" id="cpf" required placeholder="000.000.000-00">

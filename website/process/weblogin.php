@@ -1,73 +1,83 @@
 <?php
 
+session_start();
+
 require_once __DIR__ . '/../../backsistem/backend/data/conection.php';
 
-function checkData($data){
-    return !empty($data['name'])
-        && !empty($data['gender'])
-        && !empty($data['contact'])
-        && !empty($data['birthDate'])
-        && !empty($data['position'])
-        && !empty($data['city'])
-        && !empty($data['hight'])
-        && !empty($data['instagram']);
+function checkData($data, array $value){ 
+
+    for($i = 0; $i < count($value); $i++){
+        if(empty($data[$value[$i]])){
+            return false;
+        }
+    }
+    return true; 
 }
 
-function conectMYSQL(){
+function conectMYSQL(){ 
     return conection::conectar();
 }
 
-function checkLogin($pdo, $usuario, $senha){
-    // Implementar depois que usuario e senha existirem no banco.
-    return false;
-}
-
-function desconectMYSQL(&$pdo){
+function desconectMYSQL(&$pdo){ 
     $pdo = null;
 }
 
-function verificatePayment($atlId, $pdo){
-    // Implementar quando o painel precisar consultar pagamentos.
-    return null;
+function checkLogin($pdo, $cpf, $password){  //REQUIRED verifyDataMatch 
+    $stmt = $pdo->prepare("SELECT cpf_atl, password_atl FROM athlete WHERE cpf_atl = :cpf");
+    $stmt->execute(['cpf' => $cpf]);
+    $user = $stmt->fetch();
+
+    if (!$user) {
+        return false;
+    }
+
+    $continueToLogin = verifyDataMatch($user, $cpf, $password); //retorna se ta correto ou nao o login e senha
+
+    if($continueToLogin){ //lança a resposta
+        return true;
+    }
+    return false;
 }
 
-function verificateNextTraining($teamId, $pdo){
-    // Implementar quando existir a tabela de treinos.
-    return null;
+function verifyDataMatch(array $data, $user, $password){ //criada para apoio da funcao checklogin
+    if(
+        password_verify($password, $data['password_atl']) == true &&
+        $data['cpf_atl'] == $user
+    ){
+        return true;
+    }else{
+        return false;
+    }
 }
 
-function createAtlete($data){
-    return [
-        'nome' => $data['nome'],
-        'posicao' => $data['posicao'],
-        'equipe' => $data['equipe'],
-        'instagram' => $data['instagram']  ?? '',
-        'foto' => $data['foto'] ?? '',
-        'financeiro' => $data['financeiro'],
-        'proximo_treino' => $data['proximo_treino']
-    ];
+function goTo($locate){
+    header('Location:' . $locate);
 }
 
+function giveSession($client){
+    $_SESSION['user'] = $client;
+}
 
 //========================================================================//
 //                                CÓDIGO
 //========================================================================//
 
-if(checkData($_POST)){
+if (checkData($_POST, ['cpf','password'] )) {
     $pdo = conectMYSQL();
 
-    if(checkLogin($pdo, $_POST['usuario'] ?? '', $_POST['senha'] ?? '')){
-        createAtlete($_POST);
-    }else{
+    $continueLogin = checkLogin($pdo, $_POST['cpf'], $_POST['password']); //verifica se o login ta certo e retorna true
+
+    if($continueLogin == true){
+        giveSession($_POST['cpf']);
         desconectMYSQL($pdo);
-        header('Location: ../index.php?loginerror=0');
+        goTo('clientArea.php');
         exit();
     }
 
     desconectMYSQL($pdo);
-    header('Location: ../index.php');
+    goTo('../index.php');
     exit();
 }
-
-header('Location: ../index.php?loginerror=invalid_data');
-exit();
+#                                                                                                      ^
+goTo('../index.php?loginerror=invalid_data'); //caso nao chegue os dados no if anterior                 \
+exit();#                                                                                                 \

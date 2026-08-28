@@ -394,7 +394,7 @@
 
                 <form method="POST" action="process/weblogin.php">
                     <div class="form-group">
-                        <label>Usuário / E-mail</label>
+                        <label>Login</label>
                         <input type="text" id="login-user" name="usuario" class="form-control" required>
                     </div>
                     <div class="form-group">

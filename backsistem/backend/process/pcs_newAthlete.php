@@ -32,9 +32,9 @@ function validateFormData($data) {
 function enviarDadosMYSQL($pdo, $data) {
     $stmt = $pdo->prepare("INSERT INTO athlete
         (name_atl, contact_atl, birthDate_atl, position_atl, city_atl,
-         hight_atl, instagram_atl, cpf_atl, payMethod_atl, gender_atl, team_atl)
+        (hight_atl, instagram_atl, cpf_atl, payMethod_atl, gender_atl, team_atl)
         VALUES (:name, :contact, :birthDate, :position, :city, :hight,
-                :instagram, :cpf, :payMethod, :gender, :team)");
+            :instagram, :cpf, :payMethod, :gender, :team)");
 
     $stmt->execute([
         ':name' => trim($data['name']),
