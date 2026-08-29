@@ -403,6 +403,7 @@
                     </div>
                     <button type="submit" class="btn-cyan" style="width: 100%;">Entrar na Área do Cliente</button>
                 </form>
+                <p>Não possui login? <a href="clientRegister.php">registrar-se</a><br>O registro é exclusivo para clientes e atletas NOIA</p>
             </div>
         </div>
     </section>
