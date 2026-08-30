@@ -22,6 +22,10 @@ function desconectMYSQL(&$pdo){
     $pdo = null;
 }
 
+function sanitizeCpf($cpf) {
+    return preg_replace('/\D+/', '', (string) $cpf);
+}
+
 function checkLogin($pdo, $cpf, $password){  //REQUIRED verifyDataMatch 
     $stmt = $pdo->prepare("SELECT cpf_atl, password_atl FROM athlete WHERE cpf_atl = :cpf");
     $stmt->execute(['cpf' => $cpf]);
@@ -50,7 +54,7 @@ function verifyDataMatch(array $data, $user, $password){ //criada para apoio da 
     }
 }
 
-function goTo($locate){
+function redirectPage($locate){
     header('Location:' . $locate);
 }
 
@@ -65,19 +69,17 @@ function giveSession($client){
 if (checkData($_POST, ['cpf','password'] )) {
     $pdo = conectMYSQL();
 
-    $continueLogin = checkLogin($pdo, $_POST['cpf'], $_POST['password']); //verifica se o login ta certo e retorna true
+    $cpf = sanitizeCpf($_POST['cpf']);
+    $continueLogin = checkLogin($pdo, $cpf, $_POST['password']); //verifica se o login ta certo e retorna true
 
     if($continueLogin == true){
-        giveSession($_POST['cpf']);
+        giveSession($cpf);
         desconectMYSQL($pdo);
-        goTo('clientArea.php');
+        redirectPage('clientArea.php');
         exit();
     }
 
     desconectMYSQL($pdo);
-    goTo('../index.php');
+    redirectPage('../index.php');
     exit();
 }
-#                                                                                                      ^
-goTo('../index.php?loginerror=invalid_data'); //caso nao chegue os dados no if anterior                 \
-exit();#                                                                                                 \

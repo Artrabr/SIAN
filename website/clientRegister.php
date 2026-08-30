@@ -74,7 +74,7 @@ $successMessage = $_GET['success'] ?? null;
                         <strong>*</strong> Para realizar o registro é preciso participar de ao menos um treino NOIA aonde avaliaremos seu CPF.
                     </div>
 
-                    <form action="../backsistem/backend/process/pcs_newAthlete.php" method="POST" class="register-form">
+                    <form action="process/webregister.php" method="POST" class="register-form">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="cpf">CPF</label>

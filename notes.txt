@@ -4,15 +4,21 @@ pcs_newAthlete.php -> sistema de credenciamento finalizado;
 
 bug de altura heigth finalizado e testado
 
-sistema de login finalizado porem NAO TESTADO 
+Registro finalizado e funcionando com hash
+
+('sistema de login finalizado porem NAO TESTADO / testado parcialmente') //erradio
+
+SANITIZAÇÃO DE CPF ADICIONADA ✅ 
+   - pcs_newAthlete.php ✅
+   - psc_authorization.php ✅
+   - psc_cancel_authorization.php ✅
+   - psc_confirm_authorization.php ✅
+   - website/process/weblogin.php ✅
+   - website/process/webregister.php ✅
 -------------------
 fazer =>
-1. Fazer um password_hash URGENTEMENTE para o login funcionar (linha 23 weblogin.php)
-2. cadastro
-3. adicionar em todos os registros de cpf a funcao function sanitizeCpf
+1. corrigir o sistema de login 
+2. terminar o front end
+3. verificar se é possivel um possivel lançamento beta
 
-/*
-function sanitizeCpf($cpf) {
-    return preg_replace('/\D+/', '', (string) $cpf);
-}
-*/
+[TODOS QUE PREENCHEM O FORMULARIO DE CADASTRO ESTAO TENDO ACESSO Á SIAN, CORRIGIR]
