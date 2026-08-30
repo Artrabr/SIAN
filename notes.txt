@@ -3,10 +3,12 @@ pscnewcandidate -> sistema de candidatura finalizado;
 pcs_newAthlete.php -> sistema de credenciamento finalizado; 
 
 bug de altura heigth finalizado e testado
+
+sistema de login finalizado porem NAO TESTADO 
 -------------------
 fazer =>
-2. Criar sistema de login pra sian 
-3. Fazer um password_hash URGENTEMENTE para o login funcionar (linha 23 weblogin.php)
+1. Fazer um password_hash URGENTEMENTE para o login funcionar (linha 23 weblogin.php)
+2. cadastro
 
 
 
