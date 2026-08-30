@@ -72,6 +72,28 @@ body {
     color: var(--accent);
 }
 
+.authorization-form {
+    margin-bottom: 16px;
+}
+
+.notice {
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 0.95rem;
+}
+
+.notice.success {
+    background: rgba(34, 197, 94, 0.12);
+    color: #c7f9d8;
+}
+
+.notice.error {
+    background: rgba(239, 68, 68, 0.10);
+    color: #fecaca;
+}
+
 .athlete-form input,
 .athlete-form select,
 .athlete-form button {
@@ -448,6 +470,107 @@ body {
     background: rgba(255, 255, 255, 0.08);
     font-size: 0.84rem;
     color: var(--text);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.action-buttons form {
+    margin: 0;
+}
+
+.btn-confirm,
+.btn-cancel {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: auto;
+}
+
+.btn-confirm {
+    background: rgba(34, 197, 94, 0.16);
+    color: #86efac;
+    border-color: rgba(34, 197, 94, 0.32);
+}
+
+.btn-confirm:hover {
+    background: rgba(34, 197, 94, 0.24);
+    transform: scale(1.05);
+}
+
+.btn-cancel {
+    background: rgba(239, 68, 68, 0.16);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.32);
+}
+
+.btn-cancel:hover {
+    background: rgba(239, 68, 68, 0.24);
+    transform: scale(1.05);
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.badge-success {
+    background: rgba(34, 197, 94, 0.16);
+    color: #86efac;
+}
+
+.badge-canceled {
+    background: rgba(239, 68, 68, 0.16);
+    color: #fca5a5;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding: 12px;
+    background: rgba(15, 23, 33, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+.filter-chip {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--muted);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+    background: rgba(110, 231, 249, 0.12);
+    color: var(--accent);
+    border-color: rgba(110, 231, 249, 0.3);
+    transform: translateY(-2px);
+}
+
+.filter-chip.active {
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    color: #00111d;
+    border-color: var(--accent);
+    font-weight: 700;
 }
 
 @media (min-width: 768px) {

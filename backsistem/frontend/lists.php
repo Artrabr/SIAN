@@ -200,6 +200,7 @@ function idadeDoAtleta($birth) {
         <a href="home.php">Início</a>
         <a href="lists.php" class="active">Listas</a>
         <a href="registration.php">Cadastrar</a>
+        <a href="authorization.php">Autorizar</a>
     </nav>
 </body>
 </html>

@@ -30,6 +30,6 @@ function cpfAutorizado($pdo, $cpf){ // retorna o cpf ['cpf_atl' = '123.123.123-0
 //                                CÓDIGO
 //========================================================================//
 
-if(checkData($_POST, [])){
-
+if(checkData($_POST, [/*preenche com os dados que chegam aqui da aba de cadastro*/])){
+    
 }

@@ -9,50 +9,10 @@ sistema de login finalizado porem NAO TESTADO
 fazer =>
 1. Fazer um password_hash URGENTEMENTE para o login funcionar (linha 23 weblogin.php)
 2. cadastro
+3. adicionar em todos os registros de cpf a funcao function sanitizeCpf
 
-
-
-
-//apagar
-
-isso é um prompt
-
-se baseie na pagina index.php e copie todo o estilo dela para fazer uma area de registro para o cliente 
-quero que aqui tenha um form com os seguintes dados:
-
-    cpf (serve como login)
-    password
-    name
-    contact (numero de celular)
-    birthDate (data)
-    position (<option value="">Selecione...</option>
-                            <option value="levantador">Levantador(a)</option>
-                            <option value="ponteiro">Ponteiro(a)</option>
-                            <option value="oposto">Oposto(a)</option>
-                            <option value="central">Central</option>
-                            <option value="libero">Líbero</option>)
-    city (<option value="">Selecione...</option>
-                            <option value="Novo Hamburgo">Novo Hamburgo</option>
-                            <option value="São Leopoldo">São Leopoldo</option>
-                            <option value="Estancia Velha">Estancia Velha</option>
-                            <option value="Campo Bom">Campo Bom</option>
-                            <option value="Sapucaia do Sul">Sapucaia do Sul</option>
-                            <option value="Esteio">Esteio</option>
-                            <option value="Canoas">Canoas</option>
-                            <option value="Porto Alegre">Porto Alegre</option>
-                            <option value="Ivoti">Ivoti</option>
-    )
-    hight (                        <div class="form-group">
-                            <label>Altura (cm)</label>
-                            <input type="number" name="hight" class="form-control" step="0.01" placeholder="Ex: 1.88" required>
-                        </div>
-                    </div>)
-    instagram
-    email
-    payMethod (diaria ou mensal)
-    gender (homem ou mulher)
-    team (masculino ou feminino) 
-
-
-organiza do jeito que voce quiser queridao, so o insta que nao é obrigatorio preecher
-organiza do jeito qque voce quiser a sequencia de perguntas mas faz tudo em php e manda os dados para o /process/webregister.php
+/*
+function sanitizeCpf($cpf) {
+    return preg_replace('/\D+/', '', (string) $cpf);
+}
+*/
