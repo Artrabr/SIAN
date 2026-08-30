@@ -1,7 +1,11 @@
-[========================banco-de-dados========================]
-
 CREATE DATABASE sian;
 USE sian;
+
+CREATE TABLE atl_authorized (
+    cpf_atl VARCHAR(14) NOT NULL PRIMARY KEY,
+    status TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE candidates (
     id_cdt INT PRIMARY KEY AUTO_INCREMENT,
@@ -9,7 +13,7 @@ CREATE TABLE candidates (
     gender_cdt VARCHAR(12) NOT NULL,
     contact_cdt VARCHAR(20) NOT NULL,
     birthDate_cdt DATE NOT NULL,
-    hight_cdt DECIMAL(3,2) NOT NULL,	
+    hight_cdt INT NOT NULL,	
     position_cdt VARCHAR(150),
     city_cdt VARCHAR(100),
     instagram_cdt VARCHAR(50)
@@ -17,14 +21,15 @@ CREATE TABLE candidates (
 
 CREATE TABLE athlete (
     id_atl INT PRIMARY KEY AUTO_INCREMENT,
+    cpf_atl VARCHAR(14) NOT NULL UNIQUE,
+    password_atl varchar(255) NOT NULL, #------------------preparatorio-password_hash()----------------#
     name_atl VARCHAR(100) NOT NULL,
     contact_atl VARCHAR(100) NOT NULL,
     birthDate_atl DATE NOT NULL,
     position_atl VARCHAR(150) NOT NULL,
     city_atl VARCHAR(100) NOT NULL,
-    hight_atl DECIMAL(3,2) NOT NULL,
+    hight_atl INT NOT NULL,
     instagram_atl VARCHAR(100) NOT NULL,
-    cpf_atl VARCHAR(14) NOT NULL,
     payMethod_atl VARCHAR(50) NOT NULL,
     gender_atl VARCHAR(20) NOT NULL,
     team_atl VARCHAR(100) NOT NULL,

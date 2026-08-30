@@ -27,11 +27,12 @@ $successMessage = $_GET['success'] ?? null;
 
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="index.php" class="nav-link active">Início</a></li>
+                    <li><a href="index.php" class="nav-link">Início</a></li>
                     <li><a href="index.php#equipes" class="nav-link">Equipes</a></li>
                     <li><a href="index.php#participar" class="nav-link">Quero Participar</a></li>
                     <li><a href="index.php#sian" class="nav-link">SIAN <span class="badge-sian">SISTEMA</span></a></li>
-                    <li><a href="clientArea.php" class="btn-login">Área do cliente</a></li>
+                    <li><a href="clientRegister.php" class="nav-link active">Cadastro</a></li>
+                    <li><a href="index.php#login-area" class="btn-login">Login / Entrar</a></li>
                 </ul>
             </nav>
         </div>
@@ -50,7 +51,7 @@ $successMessage = $_GET['success'] ?? null;
                     <div class="register-copy-inner">
                         <p class="eyebrow">Cadastro</p>
                         <h1>Faça parte do <span>NOIA</span></h1>
-                        <p>Preencha seus dados para entrar na fila de inscrição, receber informações da comissão e acompanhar sua jornada no voleibol.</p>
+                        <p>Preencha seus dados para cadastrar-se na equipe para ter acesso ao paindel do atleta, participar de torneios, amistosos, receber informações da equipe e acompanhar sua jornada no voleibol.</p>
 
                         <div class="register-benefits">
                             <div class="benefit-item"><span>✓</span> Cadastro rápido e seguro</div>
@@ -69,7 +70,11 @@ $successMessage = $_GET['success'] ?? null;
                         <div class="alert alert-error">Não foi possível concluir o cadastro. Verifique os dados e tente novamente.</div>
                     <?php endif; ?>
 
-                    <form action="process/webregister.php" method="POST" class="register-form">
+                    <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 12px 14px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; color: #fca5a5;">
+                        <strong>*</strong> Para realizar o registro é preciso participar de ao menos um treino NOIA aonde avaliaremos seu CPF.
+                    </div>
+
+                    <form action="../backsistem/backend/process/pcs_newAthlete.php" method="POST" class="register-form">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="cpf">CPF</label>

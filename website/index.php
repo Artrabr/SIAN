@@ -35,6 +35,7 @@
                             SIAN <span class="badge-sian">SISTEMA</span>
                         </a>
                     </li>
+                    <li><a href="clientRegister.php" class="nav-link">Cadastro</a></li>
                     <li>
                         <button class="btn-login" onclick="toggleLoginModal()">Login / Entrar</button>
                     </li>
@@ -403,7 +404,11 @@
                     </div>
                     <button type="submit" class="btn-cyan" style="width: 100%;">Entrar na Área do Cliente</button>
                 </form>
-                <p>Não possui login? <a href="clientRegister.php">registrar-se</a><br>O registro é exclusivo para clientes e atletas NOIA</p>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center;">
+                    <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 0.9rem;">Não tem cadastro ainda?</p>
+                    <a href="clientRegister.php" style="display: inline-block; padding: 10px 20px; background: linear-gradient(90deg, var(--cyan-accent), #0a9eff); color: #000; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(10, 158, 255, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Fazer Cadastro Aqui</a>
+                    <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.8rem;">* O registro é exclusivo para clientes e atletas NOIA</p>
+                </div>
             </div>
         </div>
     </section>

@@ -66,6 +66,7 @@ $podePagarMensalidade = true;
             <nav aria-label="Navegação principal">
                 <ul class="nav-menu client-nav-menu">
                     <li><a href="index.php" class="nav-link">Site oficial</a></li>
+                    <li><a href="clientRegister.php" class="nav-link">Cadastro</a></li>
                     <li><a href="index.php" class="btn-login">Sair / Logout</a></li>
                 </ul>
             </nav>
