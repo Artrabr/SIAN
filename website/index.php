@@ -25,7 +25,12 @@
                 <div class="brand-text">NOIA <span>VÔLEI</span></div>
             </div>
 
-            <nav>
+            <button class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+                <span aria-hidden="true">☰</span>
+                <span class="sr-only">Abrir menu</span>
+            </button>
+
+            <nav id="site-navigation">
                 <ul class="nav-menu">
                     <li><a href="#inicio" class="nav-link active">Início</a></li>
                     <li><a href="#equipes" class="nav-link">Equipes</a></li>
@@ -60,7 +65,7 @@
                 </div>
                 <h1>NOIA <span>VÔLEI</span></h1>
                 <p>Garra, técnica e tradição nas quadras. Acompanhe nossas partidas, categorias de base e novidades do nosso time oficial.</p>
-                <div style="display: flex; gap: 15px;">
+                <div class="hero-actions">
                     <a href="#participar" class="btn-cyan">Faça o Teste</a>
                     <a href="#sian" class="btn-login" style="padding: 12px 24px;">Conheça o SIAN</a>
                 </div>
@@ -161,7 +166,12 @@
                 </div>
             </div>
 
-            <div class="team-tabs">
+            <button class="team-menu-toggle" type="button" aria-expanded="false" aria-controls="team-navigation">
+                <span aria-hidden="true">☰</span>
+                <span>Selecionar equipe</span>
+            </button>
+
+            <div class="team-tabs" id="team-navigation">
                 <button class="tab-btn active">Masculino Principal</button>
                 <button class="tab-btn">Feminino Principal</button>
                 <button class="tab-btn">Sub-21 Base</button>
@@ -252,7 +262,7 @@
                         </select>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-row-two">
                         <div class="form-group">
                             <label>data de nascimento</label>
                             <input type="date" name="birthDate" class="form-control" required>
@@ -380,7 +390,7 @@
             </div>
 
             <!-- CARD DE LOGIN -->
-            <div id="login-form-box" style="max-width: 450px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-color); padding: 30px; border-radius: 12px;">
+            <div id="login-form-box" class="login-form-box">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <div class="crest-placeholder crest-card" style="margin: 0 auto 10px auto;"><img src="imagens/noialogo.png" alt="logo noia" class="logo-size01"></div>
                     <h3 style="font-family: var(--font-heading);">Acessar Conta</h3>
@@ -489,6 +499,31 @@
         function toggleLoginModal() {
             document.getElementById('login-area').scrollIntoView({ behavior: 'smooth' });
         }
+
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const siteNavigation = document.getElementById('site-navigation');
+
+        mobileMenuToggle.addEventListener('click', function () {
+            const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+            mobileMenuToggle.setAttribute('aria-expanded', String(!isOpen));
+            siteNavigation.classList.toggle('is-open', !isOpen);
+        });
+
+        siteNavigation.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                siteNavigation.classList.remove('is-open');
+            });
+        });
+
+        const teamMenuToggle = document.querySelector('.team-menu-toggle');
+        const teamNavigation = document.getElementById('team-navigation');
+
+        teamMenuToggle.addEventListener('click', function () {
+            const isOpen = teamMenuToggle.getAttribute('aria-expanded') === 'true';
+            teamMenuToggle.setAttribute('aria-expanded', String(!isOpen));
+            teamNavigation.classList.toggle('is-open', !isOpen);
+        });
 
     </script>
 
