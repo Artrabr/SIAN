@@ -36,6 +36,7 @@
     <nav class="bottom-nav">
         <a href="home.php" class="active">Início</a>
         <a href="lists.php">Listas</a>
+        <a href="candidates.php">Candidatos</a>
         <a href="registration.php">Cadastrar</a>
         <a href="authorization.php">Autorizar</a>
     </nav>

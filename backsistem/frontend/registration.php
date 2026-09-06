@@ -91,6 +91,7 @@
     <nav class="bottom-nav">
         <a href="home.php">Início</a>
         <a href="lists.php">Listas</a>
+        <a href="candidates.php">Candidatos</a>
         <a href="registration.php" class="active">Cadastrar</a>
         <a href="authorization.php">Autorizar</a>
     </nav>

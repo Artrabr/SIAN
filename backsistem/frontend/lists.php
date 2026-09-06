@@ -13,9 +13,12 @@ $generosDisponiveis = $generosStmt->fetchAll(PDO::FETCH_COLUMN);
 $filtroGenero = $_GET['gender'] ?? '';
 $filtroGenero = in_array($filtroGenero, $generosDisponiveis, true) ? $filtroGenero : '';
 
-$sql = "SELECT a.id_atl AS id, a.name_atl AS name, a.contact_atl AS contact,
-               a.birthDate_atl AS birth, a.position_atl AS position,
-               a.city_atl AS city, a.team_atl AS team, a.gender_atl AS gender,
+$sql = "SELECT a.id_atl AS id, a.cpf_atl AS cpf, a.name_atl AS name,
+               a.contact_atl AS contact, a.birthDate_atl AS birth,
+               a.position_atl AS position, a.city_atl AS city,
+               a.hight_atl AS height, a.instagram_atl AS instagram,
+               a.payMethod_atl AS pay_method, a.gender_atl AS gender,
+               a.team_atl AS team, a.created_at AS created_at,
                EXISTS (
                    SELECT 1 FROM payments p WHERE p.atl_id = a.id_atl
                ) AS paid
@@ -37,6 +40,21 @@ $atletas = $stmt->fetchAll();
 function idadeDoAtleta($birth) {
     try {
         return (new DateTime($birth))->diff(new DateTime())->y;
+    } catch (Exception $exception) {
+        return '-';
+    }
+}
+
+function formatarCpf($cpf) {
+    $cpf = preg_replace('/\D+/', '', (string) $cpf);
+    return strlen($cpf) === 11
+        ? substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2)
+        : '-';
+}
+
+function formatarDataCadastro($data) {
+    try {
+        return (new DateTime($data))->format('d/m/Y H:i');
     } catch (Exception $exception) {
         return '-';
     }
@@ -85,6 +103,7 @@ function idadeDoAtleta($birth) {
 
                 foreach ($atletas as $atleta) {
                     $id = (int) ($atleta['id'] ?? 0);
+                    $cpf = htmlspecialchars(formatarCpf($atleta['cpf'] ?? ''));
                     $nome = htmlspecialchars($atleta['name'] ?? 'Sem nome');
                     $idade = htmlspecialchars((string) idadeDoAtleta($atleta['birth'] ?? ''));
                     $nascimento = htmlspecialchars($atleta['birth'] ?? '-');
@@ -92,6 +111,10 @@ function idadeDoAtleta($birth) {
                     $cidade = htmlspecialchars($atleta['city'] ?? '-');
                     $equipe = htmlspecialchars($atleta['team'] ?? '-');
                     $genero = htmlspecialchars($atleta['gender'] ?? '-');
+                    $altura = htmlspecialchars((string) ($atleta['height'] ?? '-'));
+                    $instagram = htmlspecialchars($atleta['instagram'] ?? '-');
+                    $metodoPagamento = htmlspecialchars($atleta['pay_method'] ?? '-');
+                    $dataCadastro = htmlspecialchars(formatarDataCadastro($atleta['created_at'] ?? ''));
                     $pago = (bool) $atleta['paid'];
                     $statusTexto = $pago ? 'Pago' : 'Pendente';
                     $statusClasse = $pago ? 'paid' : 'pending';
@@ -132,6 +155,10 @@ function idadeDoAtleta($birth) {
                                     <strong>#<?= $id ?></strong>
                                 </div>
                                 <div>
+                                    <span>CPF</span>
+                                    <strong><?= $cpf ?></strong>
+                                </div>
+                                <div>
                                     <span>Nome</span>
                                     <strong><?= $nome ?></strong>
                                 </div>
@@ -152,6 +179,10 @@ function idadeDoAtleta($birth) {
                                     <strong><?= $posicao ?></strong>
                                 </div>
                                 <div>
+                                    <span>Altura</span>
+                                    <strong><?= $altura ?> cm</strong>
+                                </div>
+                                <div>
                                     <span>Contato</span>
                                     <strong><?= htmlspecialchars($atleta['contact'] ?? '-') ?></strong>
                                 </div>
@@ -162,6 +193,18 @@ function idadeDoAtleta($birth) {
                                 <div>
                                     <span>Equipe</span>
                                     <strong><?= $equipe ?></strong>
+                                </div>
+                                <div>
+                                    <span>Instagram</span>
+                                    <strong><?= $instagram ?></strong>
+                                </div>
+                                <div>
+                                    <span>Forma de pagamento</span>
+                                    <strong><?= $metodoPagamento ?></strong>
+                                </div>
+                                <div>
+                                    <span>Cadastro realizado em</span>
+                                    <strong><?= $dataCadastro ?></strong>
                                 </div>
                                 <div>
                                     <span>Mensalidade</span>
@@ -199,6 +242,7 @@ function idadeDoAtleta($birth) {
     <nav class="bottom-nav">
         <a href="home.php">Início</a>
         <a href="lists.php" class="active">Listas</a>
+        <a href="candidates.php">Candidatos</a>
         <a href="registration.php">Cadastrar</a>
         <a href="authorization.php">Autorizar</a>
     </nav>
