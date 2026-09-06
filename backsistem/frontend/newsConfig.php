@@ -32,6 +32,7 @@ if ($filtroCategoria !== '') {
 }
 $stmt->execute();
 $noticias = $stmt->fetchAll();
+$mensagemStatus = $_GET['status'] ?? null;
 
 function escapar($valor) {
     return htmlspecialchars((string) ($valor ?? '-'), ENT_QUOTES, 'UTF-8');
@@ -90,6 +91,12 @@ function imagemNoticiaDisponivel($url) {
             <h2>Notícias cadastradas</h2>
             <p>Consulte as notícias e acompanhe o status de cada postagem.</p>
         </section>
+
+        <?php if ($mensagemStatus === 'sucesso'): ?>
+            <p class="notice success">Status da notícia atualizado.</p>
+        <?php elseif ($mensagemStatus === 'erro'): ?>
+            <p class="notice error">Não foi possível atualizar o status da notícia.</p>
+        <?php endif; ?>
 
         <section class="filter-bar" aria-label="Filtrar notícias por categoria">
             <a href="newsConfig.php" class="filter-chip <?= $filtroCategoria === '' ? 'active' : '' ?>">Todas</a>
@@ -169,6 +176,14 @@ function imagemNoticiaDisponivel($url) {
                             <h4>Descrição</h4>
                             <p><?= nl2br(escapar($noticia['nws_content'])) ?></p>
                         </div>
+
+                        <form action="../backend/process/pcs_togglePost.php" method="POST" class="status-form">
+                            <input type="hidden" name="id" value="<?= $id ?>">
+                            <input type="hidden" name="status" value="<?= $publicada ? '0' : '1' ?>">
+                            <button type="submit" class="toggle-paid <?= $statusClasse ?>">
+                                <?= $publicada ? 'Despublicar notícia' : 'Publicar notícia' ?>
+                            </button>
+                        </form>
                     </div>
                 </article>
             <?php endforeach; ?>
