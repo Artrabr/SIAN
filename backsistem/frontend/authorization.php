@@ -103,12 +103,12 @@ try {
     </main>
 
     <nav class="bottom-nav">
-        <a href="home.php"><i class="fa-slab-press-duo fa-regular fa-house" style="color: rgb(255, 255, 255);"></i></i></a>
-        <a href="lists.php"><i class="fa-solid fa-list" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="candidates.php"><i class="fa-solid fa-inbox" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="registration.php"><i class="fa-solid fa-user-pen" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="news.php"><i class="fa-solid fa-newspaper" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="authorization.php" class="active"><i class="fa-solid fa-user-gear" style="color: rgb(255, 255, 255);"></i></a>
+        <a href="home.php"><i class="fa-slab-press-duo fa-regular fa-house"></i></a>
+        <a href="lists.php"><i class="fa-solid fa-list"></i></a>
+        <a href="candidates.php"><i class="fa-solid fa-inbox"></i></a>
+        <a href="registration.php"><i class="fa-solid fa-user-pen"></i></a>
+        <a href="news.php"><i class="fa-solid fa-newspaper"></i></a>
+        <a href="authorization.php" class="active"><i class="fa-solid fa-user-gear"></i></a>
     </nav>
 </body>
 </html>

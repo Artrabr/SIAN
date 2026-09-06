@@ -1,71 +1,12 @@
 <?php
-require_once __DIR__ . "/../backend/data/conection.php";
-
-$pdo = conection::conectar();
-
-// Busca os valores de gênero que realmente existem na tabela,
-// assim o filtro se adapta ao que estiver salvo no banco (ex: Masculino/Feminino).
-$generosStmt = $pdo->query("SELECT DISTINCT gender_atl FROM athlete ORDER BY gender_atl");
-$generosDisponiveis = $generosStmt->fetchAll(PDO::FETCH_COLUMN);
-
-// Lê o filtro vindo da URL (?gender=Feminino) e só aceita valores que
-// realmente existem no banco, evitando qualquer valor arbitrário.
-$filtroGenero = $_GET['gender'] ?? '';
-$filtroGenero = in_array($filtroGenero, $generosDisponiveis, true) ? $filtroGenero : '';
-
-$sql = "SELECT a.id_atl AS id, a.cpf_atl AS cpf, a.name_atl AS name,
-               a.contact_atl AS contact, a.birthDate_atl AS birth,
-               a.position_atl AS position, a.city_atl AS city,
-               a.hight_atl AS height, a.instagram_atl AS instagram,
-               a.payMethod_atl AS pay_method, a.gender_atl AS gender,
-               a.team_atl AS team, a.created_at AS created_at,
-               EXISTS (
-                   SELECT 1 FROM payments p WHERE p.atl_id = a.id_atl
-               ) AS paid
-        FROM athlete a";
-
-if ($filtroGenero !== '') {
-    $sql .= " WHERE a.gender_atl = :gender";
-}
-
-$sql .= " ORDER BY a.name_atl";
-
-$stmt = $pdo->prepare($sql);
-if ($filtroGenero !== '') {
-    $stmt->bindValue(':gender', $filtroGenero);
-}
-$stmt->execute();
-$atletas = $stmt->fetchAll();
-
-function idadeDoAtleta($birth) {
-    try {
-        return (new DateTime($birth))->diff(new DateTime())->y;
-    } catch (Exception $exception) {
-        return '-';
-    }
-}
-
-function formatarCpf($cpf) {
-    $cpf = preg_replace('/\D+/', '', (string) $cpf);
-    return strlen($cpf) === 11
-        ? substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2)
-        : '-';
-}
-
-function formatarDataCadastro($data) {
-    try {
-        return (new DateTime($data))->format('d/m/Y H:i');
-    } catch (Exception $exception) {
-        return '-';
-    }
-}
+$mensagem = $_GET['status'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIAN - Listas</title>
+    <title>SIAN - Nova notícia</title>
     <link rel="stylesheet" href="style/mainstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
@@ -74,179 +15,98 @@ function formatarDataCadastro($data) {
         <img src="style/logo-sian.png" alt="Logo SIAN" class="logo">
         <div>
             <h1>SIAN</h1>
-            <p>Lista de atletas</p>
+            <p>Publicar notícia</p>
         </div>
     </header>
 
     <main class="content-card">
         <section class="page-intro">
-            <h2>Atletas cadastrados</h2>
-            <p>Toque em qualquer card para ver todos os detalhes e o status de mensalidade.</p>
+            <h2>Nova notícia</h2>
+            <p>Preencha os dados abaixo para preparar uma publicação para o site.</p>
         </section>
 
-        <section class="filter-bar">
-            <a href="lists.php" class="filter-chip <?= $filtroGenero === '' ? 'active' : '' ?>">
-                Todos
-            </a>
-            <?php foreach ($generosDisponiveis as $genero): ?>
-                <a href="lists.php?gender=<?= urlencode($genero) ?>"
-                   class="filter-chip <?= $filtroGenero === $genero ? 'active' : '' ?>">
-                    <?= htmlspecialchars($genero) ?>
-                </a>
-            <?php endforeach; ?>
-        </section>
+        <?php if ($mensagem === 'sucesso'): ?>
+            <p class="notice success">Notícia enviada para processamento.</p>
+        <?php elseif ($mensagem === 'erro'): ?>
+            <p class="notice error">Não foi possível enviar a notícia. Confira os dados.</p>
+        <?php endif; ?>
 
-        <section class="list-stack">
-            <?php
-                if (empty($atletas)) {
-                    echo '<p class="empty-state">Nenhum atleta encontrado para esse filtro.</p>';
-                }
+        <form action="../backend/process/psc_newNews.php" method="POST" enctype="multipart/form-data" class="athlete-form news-form">
+            <div class="form-field">
+                <label for="category">Categoria ou assunto</label>
+                <input id="category" type="text" name="category" maxlength="80" placeholder="Ex.: Base, Vitória, SIAN" required>
+            </div>
 
-                foreach ($atletas as $atleta) {
-                    $id = (int) ($atleta['id'] ?? 0);
-                    $cpf = htmlspecialchars(formatarCpf($atleta['cpf'] ?? ''));
-                    $nome = htmlspecialchars($atleta['name'] ?? 'Sem nome');
-                    $idade = htmlspecialchars((string) idadeDoAtleta($atleta['birth'] ?? ''));
-                    $nascimento = htmlspecialchars($atleta['birth'] ?? '-');
-                    $posicao = htmlspecialchars(ucfirst($atleta['position'] ?? '-'));
-                    $cidade = htmlspecialchars($atleta['city'] ?? '-');
-                    $equipe = htmlspecialchars($atleta['team'] ?? '-');
-                    $genero = htmlspecialchars($atleta['gender'] ?? '-');
-                    $altura = htmlspecialchars((string) ($atleta['height'] ?? '-'));
-                    $instagram = htmlspecialchars($atleta['instagram'] ?? '-');
-                    $metodoPagamento = htmlspecialchars($atleta['pay_method'] ?? '-');
-                    $dataCadastro = htmlspecialchars(formatarDataCadastro($atleta['created_at'] ?? ''));
-                    $pago = (bool) $atleta['paid'];
-                    $statusTexto = $pago ? 'Pago' : 'Pendente';
-                    $statusClasse = $pago ? 'paid' : 'pending';
-                    $cardId = 'card-' . $id;
-                    ?>
-                    <div class="athlete-card">
-                        <input type="checkbox" class="card-toggle" id="<?= $cardId ?>">
+            <div class="form-field">
+                <label for="title">Título da notícia</label>
+                <input id="title" type="text" name="title" maxlength="180" placeholder="Digite um título claro e objetivo" required>
+            </div>
 
-                        <label class="card-summary" for="<?= $cardId ?>">
-                            <div class="summary-main">
-                                <div>
-                                    <span class="card-id">#<?= $id ?></span>
-                                    <h3><?= $nome ?></h3>
-                                </div>
-                                <span class="status-pill <?= $statusClasse ?>"><?= $statusTexto ?></span>
-                            </div>
-                            <div class="summary-meta">
-                                <span><?= $idade ?> anos</span>
-                                <span><?= $posicao ?></span>
-                                <span><?= $equipe ?></span>
-                            </div>
-                        </label>
+            <div class="form-field">
+                <label for="description">Descrição</label>
+                <textarea id="description" name="description" maxlength="5000" rows="8" placeholder="Escreva o conteúdo ou resumo da notícia" required></textarea>
+                <small class="field-help"><span id="description-count">0</span>/5000 caracteres</small>
+            </div>
 
-                        <div class="card-details">
-                            <label for="<?= $cardId ?>" class="close-btn" aria-label="Fechar">×</label>
+            <div class="form-field">
+                <label for="photo">Foto da notícia</label>
+                <div class="news-upload">
+                    <input id="photo" type="file" name="photo" accept="image/jpeg,image/png,image/webp" required>
+                    <label for="photo" class="news-upload-label">
+                        <span class="news-upload-icon" aria-hidden="true">↑</span>
+                        <span class="news-upload-copy">
+                            <strong>Escolher foto</strong>
+                            <small id="photo-file-name">Nenhum arquivo escolhido</small>
+                        </span>
+                    </label>
+                </div>
+                <small class="field-help">Formatos aceitos: JPG, PNG ou WEBP. Limite recomendado: 5 MB.</small>
+                <div class="news-image-preview" id="image-preview" hidden>
+                    <img id="image-preview-img" alt="Pré-visualização da foto selecionada">
+                </div>
+            </div>
 
-                            <div class="detail-header">
-                                <div>
-                                    <p class="eyebrow">Detalhes do atleta</p>
-                                    <h3><?= $nome ?></h3>
-                                </div>
-                                <span class="status-pill <?= $statusClasse ?>"><?= $statusTexto ?></span>
-                            </div>
-
-                            <div class="detail-grid">
-                                <div>
-                                    <span>ID</span>
-                                    <strong>#<?= $id ?></strong>
-                                </div>
-                                <div>
-                                    <span>CPF</span>
-                                    <strong><?= $cpf ?></strong>
-                                </div>
-                                <div>
-                                    <span>Nome</span>
-                                    <strong><?= $nome ?></strong>
-                                </div>
-                                <div>
-                                    <span>Gênero</span>
-                                    <strong><?= $genero ?></strong>
-                                </div>
-                                <div>
-                                    <span>Idade</span>
-                                    <strong><?= $idade ?> anos</strong>
-                                </div>
-                                <div>
-                                    <span>Data de nascimento</span>
-                                    <strong><?= $nascimento ?></strong>
-                                </div>
-                                <div>
-                                    <span>Posição</span>
-                                    <strong><?= $posicao ?></strong>
-                                </div>
-                                <div>
-                                    <span>Altura</span>
-                                    <strong><?= $altura ?> cm</strong>
-                                </div>
-                                <div>
-                                    <span>Contato</span>
-                                    <strong><?= htmlspecialchars($atleta['contact'] ?? '-') ?></strong>
-                                </div>
-                                <div>
-                                    <span>Cidade</span>
-                                    <strong><?= $cidade ?></strong>
-                                </div>
-                                <div>
-                                    <span>Equipe</span>
-                                    <strong><?= $equipe ?></strong>
-                                </div>
-                                <div>
-                                    <span>Instagram</span>
-                                    <strong><?= $instagram ?></strong>
-                                </div>
-                                <div>
-                                    <span>Forma de pagamento</span>
-                                    <strong><?= $metodoPagamento ?></strong>
-                                </div>
-                                <div>
-                                    <span>Cadastro realizado em</span>
-                                    <strong><?= $dataCadastro ?></strong>
-                                </div>
-                                <div>
-                                    <span>Mensalidade</span>
-                                    <strong><?= $pago ? 'Pago' : 'Pendente' ?></strong>
-                                </div>
-                            </div>
-
-                            <form action="../backend/process/pcs_togglePaid.php" method="POST" class="status-form">
-                                <input type="hidden" name="id" value="<?= $id ?>">
-                                <input type="hidden" name="paid" value="<?= $pago ? 'false' : 'true' ?>">
-                                <button type="submit" class="toggle-paid <?= $statusClasse ?>">
-                                    <?= $pago ? 'Marcar como pendente' : 'Marcar como pago' ?>
-                                </button>
-                            </form>
-
-                            <div class="detail-panel">
-                                <h4>Dados extras</h4>
-                                <p>Este espaço pode receber performance, frequência, avaliações, lesões e observações futuras.</p>
-                                <div class="chip-row">
-                                    <span class="chip">Performance</span>
-                                    <span class="chip">Frequência</span>
-                                    <span class="chip">Avaliações</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php
-                }
-            ?>
-        </section>
-
-        <a href="home.php" class="back-link">← Voltar ao home</a>
+            <div class="news-form-actions">
+                <a href="home.php" class="back-link">Cancelar</a>
+                <button type="submit" class="news-submit">Preparar publicação</button>
+            </div>
+        </form>
     </main>
 
     <nav class="bottom-nav">
-        <a href="home.php"><i class="fa-slab-press-duo fa-regular fa-house" style="color: rgb(255, 255, 255);"></i></i></a>
-        <a href="lists.php"><i class="fa-solid fa-list" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="candidates.php"><i class="fa-solid fa-inbox" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="registration.php"><i class="fa-solid fa-user-pen" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="news.php" class="active"><i class="fa-solid fa-newspaper" style="color: rgb(255, 255, 255);"></i></a>
-        <a href="authorization.php"><i class="fa-solid fa-user-gear" style="color: rgb(255, 255, 255);"></i></a>
+        <a href="home.php"><i class="fa-regular fa-house" aria-label="Início"></i></a>
+        <a href="lists.php"><i class="fa-solid fa-list" aria-label="Atletas"></i></a>
+        <a href="candidates.php"><i class="fa-solid fa-inbox" aria-label="Candidatos"></i></a>
+        <a href="registration.php"><i class="fa-solid fa-user-pen" aria-label="Cadastrar"></i></a>
+        <a href="news.php" class="active"><i class="fa-solid fa-newspaper" aria-label="Notícias"></i></a>
+        <a href="authorization.php"><i class="fa-solid fa-user-gear" aria-label="Autorizações"></i></a>
     </nav>
+
+    <script>
+        const description = document.getElementById('description');
+        const descriptionCount = document.getElementById('description-count');
+        const photo = document.getElementById('photo');
+        const photoFileName = document.getElementById('photo-file-name');
+        const preview = document.getElementById('image-preview');
+        const previewImage = document.getElementById('image-preview-img');
+
+        description.addEventListener('input', function () {
+            descriptionCount.textContent = description.value.length;
+        });
+
+        photo.addEventListener('change', function () {
+            const file = photo.files[0];
+            if (!file) {
+                photoFileName.textContent = 'Nenhum arquivo escolhido';
+                preview.hidden = true;
+                previewImage.removeAttribute('src');
+                return;
+            }
+
+            photoFileName.textContent = file.name;
+            previewImage.src = URL.createObjectURL(file);
+            preview.hidden = false;
+        });
+    </script>
 </body>
 </html>

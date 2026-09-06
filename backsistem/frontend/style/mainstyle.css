@@ -96,6 +96,7 @@ body {
 
 .athlete-form input,
 .athlete-form select,
+.athlete-form textarea,
 .athlete-form button {
     width: 100%;
     padding: 12px 14px;
@@ -105,13 +106,143 @@ body {
 }
 
 .athlete-form input,
-.athlete-form select {
+.athlete-form select,
+.athlete-form textarea {
     background: #02050a;
     color: var(--text);
 }
 
 .athlete-form input::placeholder {
     color: #7b8a99;
+}
+
+.athlete-form textarea {
+    min-height: 160px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-field label {
+    margin: 0;
+}
+
+.field-help {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.news-form {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.news-upload {
+    position: relative;
+}
+
+.news-upload input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.news-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 76px;
+    padding: 14px 16px;
+    border: 1px dashed var(--accent);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(110, 231, 249, 0.12), rgba(2, 5, 10, 0.85));
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.news-upload-label:hover,
+.news-upload input[type="file"]:focus-visible + .news-upload-label {
+    border-color: #fff;
+    background: linear-gradient(135deg, rgba(110, 231, 249, 0.22), rgba(2, 5, 10, 0.9));
+    transform: translateY(-1px);
+}
+
+.news-upload-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #00111d;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.news-upload-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 3px;
+}
+
+.news-upload-copy strong {
+    color: var(--accent);
+}
+
+.news-upload-copy small {
+    overflow: hidden;
+    color: var(--muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.news-image-preview {
+    margin-top: 4px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #02050a;
+}
+
+.news-image-preview img {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+}
+
+.news-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.news-form-actions .back-link {
+    margin-top: 0;
+}
+
+.news-submit {
+    padding: 12px 16px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    color: #00111d;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
 }
 
 .athlete-form button {
@@ -150,6 +281,10 @@ body {
     font-size: 0.95rem;
     padding: 8px 10px;
     border-radius: 999px;
+}
+
+.bottom-nav a i {
+    color: inherit;
 }
 
 .bottom-nav a.active {
