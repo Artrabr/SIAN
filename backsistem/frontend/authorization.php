@@ -22,6 +22,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIAN - Autorização</title>
     <link rel="stylesheet" href="style/mainstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
 <body>
     <header class="topbar">
@@ -102,11 +103,12 @@ try {
     </main>
 
     <nav class="bottom-nav">
-        <a href="home.php">Início</a>
-        <a href="lists.php">Listas</a>
-        <a href="candidates.php">Candidatos</a>
-        <a href="registration.php">Cadastrar</a>
-        <a href="authorization.php" class="active">Autorizar</a>
+        <a href="home.php"><i class="fa-slab-press-duo fa-regular fa-house" style="color: rgb(255, 255, 255);"></i></i></a>
+        <a href="lists.php"><i class="fa-solid fa-list" style="color: rgb(255, 255, 255);"></i></a>
+        <a href="candidates.php"><i class="fa-solid fa-inbox" style="color: rgb(255, 255, 255);"></i></a>
+        <a href="registration.php"><i class="fa-solid fa-user-pen" style="color: rgb(255, 255, 255);"></i></a>
+        <a href="news.php"><i class="fa-solid fa-newspaper" style="color: rgb(255, 255, 255);"></i></a>
+        <a href="authorization.php" class="active"><i class="fa-solid fa-user-gear" style="color: rgb(255, 255, 255);"></i></a>
     </nav>
 </body>
 </html>

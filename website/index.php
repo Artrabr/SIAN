@@ -32,13 +32,13 @@
 
             <nav id="site-navigation">
                 <ul class="nav-menu">
-                    <li><a href="#inicio" class="nav-link active">Início</a></li>
-                    <li><a href="#equipes" class="nav-link">Equipes</a></li>
-                    <li><a href="#participar" class="nav-link">Quero Participar</a></li>
+                    <li><button type="button" onclick="navigateToSection('inicio')" class="nav-link active">Início</button></li>
+                    <li><button type="button" onclick="navigateToSection('equipes')" class="nav-link">Equipes</button></li>
+                    <li><button type="button" onclick="navigateToSection('participar')" class="nav-link">Quero Participar</button></li>
                     <li>
-                        <a href="#sian" class="nav-link">
+                        <button type="button" onclick="navigateToSection('sian')" class="nav-link">
                             SIAN <span class="badge-sian">SISTEMA</span>
-                        </a>
+                        </button>
                     </li>
                     <li>
                         <button class="btn-login" onclick="toggleLoginModal()">Login / Entrar</button>
@@ -498,6 +498,20 @@
 
         function toggleLoginModal() {
             document.getElementById('login-area').scrollIntoView({ behavior: 'smooth' });
+            closeMobileMenu();
+        }
+
+        function navigateToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+            closeMobileMenu();
+        }
+
+        function closeMobileMenu() {
+            mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            siteNavigation.classList.remove('is-open');
         }
 
         const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -509,10 +523,9 @@
             siteNavigation.classList.toggle('is-open', !isOpen);
         });
 
-        siteNavigation.querySelectorAll('a').forEach(function (link) {
+        siteNavigation.querySelectorAll('a, button.nav-link, button.btn-login').forEach(function (link) {
             link.addEventListener('click', function () {
-                mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                siteNavigation.classList.remove('is-open');
+                closeMobileMenu();
             });
         });
 

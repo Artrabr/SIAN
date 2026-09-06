@@ -159,6 +159,8 @@
         }
 
         .nav-link {
+            background: transparent;
+            border: 0;
             font-family: var(--font-heading);
             font-size: 0.88rem;
             font-weight: 700;
@@ -168,6 +170,7 @@
             padding: 8px 12px;
             border-radius: 4px;
             position: relative;
+            cursor: pointer;
         }
 
         .nav-link:hover, .nav-link.active {
