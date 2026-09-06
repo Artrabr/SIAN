@@ -95,6 +95,7 @@
         <a href="candidates.php"><i class="fa-solid fa-inbox"></i></a>
         <a href="registration.php" class="active"><i class="fa-solid fa-user-pen"></i></a>
         <a href="news.php"><i class="fa-solid fa-newspaper"></i></a>
+        <a href="newsConfig.php"><i class="fa-brands fa-leanpub"></i></a>
         <a href="authorization.php"><i class="fa-solid fa-user-gear"></i></a>
     </nav>
 </body>

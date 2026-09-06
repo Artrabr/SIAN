@@ -79,6 +79,7 @@ $mensagem = $_GET['status'] ?? null;
         <a href="candidates.php"><i class="fa-solid fa-inbox" aria-label="Candidatos"></i></a>
         <a href="registration.php"><i class="fa-solid fa-user-pen" aria-label="Cadastrar"></i></a>
         <a href="news.php" class="active"><i class="fa-solid fa-newspaper" aria-label="Notícias"></i></a>
+        <a href="newsConfig.php"><i class="fa-brands fa-leanpub"></i></a>
         <a href="authorization.php"><i class="fa-solid fa-user-gear" aria-label="Autorizações"></i></a>
     </nav>
 
