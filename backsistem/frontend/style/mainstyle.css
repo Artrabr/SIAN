@@ -593,6 +593,16 @@ body {
     line-height: 1.5;
 }
 
+.news-config-image {
+    display: block;
+    width: 100%;
+    max-height: 360px;
+    margin: 0 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    object-fit: cover;
+}
+
 .chip-row {
     display: flex;
     flex-wrap: wrap;

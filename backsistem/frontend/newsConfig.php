@@ -1,63 +1,70 @@
 <?php
-require_once __DIR__ . "/../backend/data/conection.php";
+require_once __DIR__ . '/../backend/data/conection.php';
 
 $pdo = conection::conectar();
 
-// Busca os valores de gênero que realmente existem na tabela,
-// assim o filtro se adapta ao que estiver salvo no banco (ex: Masculino/Feminino).
-$newsStmt = $pdo->query("SELECT DISTINCT gender_atl FROM athlete ORDER BY gender_atl");
-$generosDisponiveis = $generosStmt->fetchAll(PDO::FETCH_COLUMN);
+$categoriasStmt = $pdo->query(
+    'SELECT DISTINCT nws_category
+     FROM news
+     WHERE nws_category IS NOT NULL AND nws_category <> ""
+     ORDER BY nws_category'
+);
+$categoriasDisponiveis = $categoriasStmt->fetchAll(PDO::FETCH_COLUMN);
 
-// Lê o filtro vindo da URL (?gender=Feminino) e só aceita valores que
-// realmente existem no banco, evitando qualquer valor arbitrário.
-$filtroGenero = $_GET['gender'] ?? '';
-$filtroGenero = in_array($filtroGenero, $generosDisponiveis, true) ? $filtroGenero : '';
-
-$sql = "SELECT a.id_atl AS id, a.cpf_atl AS cpf, a.name_atl AS name,
-               a.contact_atl AS contact, a.birthDate_atl AS birth,
-               a.position_atl AS position, a.city_atl AS city,
-               a.hight_atl AS height, a.instagram_atl AS instagram,
-               a.payMethod_atl AS pay_method, a.gender_atl AS gender,
-               a.team_atl AS team, a.created_at AS created_at,
-               EXISTS (
-                   SELECT 1 FROM payments p WHERE p.atl_id = a.id_atl
-               ) AS paid
-        FROM athlete a";
-
-if ($filtroGenero !== '') {
-    $sql .= " WHERE a.gender_atl = :gender";
+$filtroCategoria = trim($_GET['category'] ?? '');
+if (!in_array($filtroCategoria, $categoriasDisponiveis, true)) {
+    $filtroCategoria = '';
 }
 
-$sql .= " ORDER BY a.name_atl";
+$sql = 'SELECT nws_id, nws_title, nws_category, nws_content, nws_photo_url,
+               nws_status, nws_data_publicacao, nws_created_at, nws_updated_at
+        FROM news';
+
+if ($filtroCategoria !== '') {
+    $sql .= ' WHERE nws_category = :category';
+}
+
+$sql .= ' ORDER BY nws_created_at DESC, nws_id DESC';
 
 $stmt = $pdo->prepare($sql);
-if ($filtroGenero !== '') {
-    $stmt->bindValue(':gender', $filtroGenero);
+if ($filtroCategoria !== '') {
+    $stmt->bindValue(':category', $filtroCategoria);
 }
 $stmt->execute();
-$atletas = $stmt->fetchAll();
+$noticias = $stmt->fetchAll();
 
-function idadeDoAtleta($birth) {
-    try {
-        return (new DateTime($birth))->diff(new DateTime())->y;
-    } catch (Exception $exception) {
+function escapar($valor) {
+    return htmlspecialchars((string) ($valor ?? '-'), ENT_QUOTES, 'UTF-8');
+}
+
+function formatarDataNoticia($data) {
+    if (empty($data)) {
         return '-';
     }
-}
 
-function formatarCpf($cpf) {
-    $cpf = preg_replace('/\D+/', '', (string) $cpf);
-    return strlen($cpf) === 11
-        ? substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2)
-        : '-';
-}
-
-function formatarDataCadastro($data) {
     try {
         return (new DateTime($data))->format('d/m/Y H:i');
     } catch (Exception $exception) {
         return '-';
     }
+}
+
+function resumoNoticia($conteudo, $limite = 180) {
+    $conteudo = trim((string) $conteudo);
+    if (strlen($conteudo) <= $limite) {
+        return $conteudo;
+    }
+
+    return substr($conteudo, 0, $limite) . '...';
+}
+
+function imagemNoticiaDisponivel($url) {
+    if (empty($url)) {
+        return false;
+    }
+
+    $caminho = realpath(__DIR__ . '/' . $url);
+    return $caminho !== false && is_file($caminho);
 }
 ?>
 <!DOCTYPE html>
@@ -65,7 +72,7 @@ function formatarDataCadastro($data) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIAN - Listas</title>
+    <title>SIAN - Configurar notícias</title>
     <link rel="stylesheet" href="style/mainstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
@@ -74,170 +81,100 @@ function formatarDataCadastro($data) {
         <img src="style/logo-sian.png" alt="Logo SIAN" class="logo">
         <div>
             <h1>SIAN</h1>
-            <p>Lista de atletas</p>
+            <p>Configurar notícias</p>
         </div>
     </header>
 
     <main class="content-card">
         <section class="page-intro">
-            <h2>Configurar notícias</h2>
-            <p>Toque em qualquer card para ver todos os detalhes e o status de cada postagem.</p>
+            <h2>Notícias cadastradas</h2>
+            <p>Consulte as notícias e acompanhe o status de cada postagem.</p>
         </section>
 
-        <section class="filter-bar">
-            <a href="newsConfig.php" class="filter-chip <?= $filtroCategory === '' ? 'active' : '' ?>">
-                Todos
-            </a>
-            <?php foreach ($categoryTotal as $catagory): ?>
-                <a href="newsConfig.php?category=<?= urlencode($catagory) ?>"
-                   class="filter-chip <?= $filtroCategory === $catagory ? 'active' : '' ?>">
-                    <?= htmlspecialchars($catagory) ?>
+        <section class="filter-bar" aria-label="Filtrar notícias por categoria">
+            <a href="newsConfig.php" class="filter-chip <?= $filtroCategoria === '' ? 'active' : '' ?>">Todas</a>
+            <?php foreach ($categoriasDisponiveis as $categoria): ?>
+                <a href="newsConfig.php?category=<?= urlencode($categoria) ?>"
+                   class="filter-chip <?= $filtroCategoria === $categoria ? 'active' : '' ?>">
+                    <?= escapar($categoria) ?>
                 </a>
-            <?php endforeach;// sim é nojento usar essa merda KKKKKKKKKK ?>
+            <?php endforeach; ?>
         </section>
 
-        <section class="list-stack">
-            <?php
-                if (empty($atletas)) {
-                    echo '<p class="empty-state">Nenhum atleta encontrado para esse filtro.</p>';
-                }
+        <section class="list-stack news-list">
+            <?php if (empty($noticias)): ?>
+                <p class="empty-state">Nenhuma notícia encontrada.</p>
+            <?php endif; ?>
 
-                foreach ($atletas as $atleta) {
-                    $id = (int) ($atleta['id'] ?? 0);
-                    $cpf = htmlspecialchars(formatarCpf($atleta['cpf'] ?? ''));
-                    $nome = htmlspecialchars($atleta['name'] ?? 'Sem nome');
-                    $idade = htmlspecialchars((string) idadeDoAtleta($atleta['birth'] ?? ''));
-                    $nascimento = htmlspecialchars($atleta['birth'] ?? '-');
-                    $posicao = htmlspecialchars(ucfirst($atleta['position'] ?? '-'));
-                    $cidade = htmlspecialchars($atleta['city'] ?? '-');
-                    $equipe = htmlspecialchars($atleta['team'] ?? '-');
-                    $genero = htmlspecialchars($atleta['gender'] ?? '-');
-                    $altura = htmlspecialchars((string) ($atleta['height'] ?? '-'));
-                    $instagram = htmlspecialchars($atleta['instagram'] ?? '-');
-                    $metodoPagamento = htmlspecialchars($atleta['pay_method'] ?? '-');
-                    $dataCadastro = htmlspecialchars(formatarDataCadastro($atleta['created_at'] ?? ''));
-                    $pago = (bool) $atleta['paid'];
-                    $statusTexto = $pago ? 'Pago' : 'Pendente';
-                    $statusClasse = $pago ? 'paid' : 'pending';
-                    $cardId = 'card-' . $id;
-                    ?>
-                    <div class="athlete-card">
-                        <input type="checkbox" class="card-toggle" id="<?= $cardId ?>">
+            <?php foreach ($noticias as $noticia): ?>
+                <?php
+                    $id = (int) $noticia['nws_id'];
+                    $cardId = 'news-card-' . $id;
+                    $publicada = (bool) $noticia['nws_status'];
+                    $statusTexto = $publicada ? 'Publicada' : 'Rascunho';
+                    $statusClasse = $publicada ? 'paid' : 'pending';
+                ?>
+                <article class="athlete-card news-card-item">
+                    <input type="checkbox" class="card-toggle" id="<?= $cardId ?>">
 
-                        <label class="card-summary" for="<?= $cardId ?>">
-                            <div class="summary-main">
-                                <div>
-                                    <span class="card-id">#<?= $id ?></span>
-                                    <h3><?= $nome ?></h3>
-                                </div>
-                                <span class="status-pill <?= $statusClasse ?>"><?= $statusTexto ?></span>
+                    <label class="card-summary" for="<?= $cardId ?>">
+                        <div class="summary-main">
+                            <div>
+                                <span class="card-id">#<?= $id ?> · <?= escapar($noticia['nws_category']) ?></span>
+                                <h3><?= escapar($noticia['nws_title']) ?></h3>
                             </div>
-                            <div class="summary-meta">
-                                <span><?= $idade ?> anos</span>
-                                <span><?= $posicao ?></span>
-                                <span><?= $equipe ?></span>
+                            <span class="status-pill <?= $statusClasse ?>"><?= $statusTexto ?></span>
+                        </div>
+                        <div class="summary-meta">
+                            <span><?= escapar(formatarDataNoticia($noticia['nws_created_at'])) ?></span>
+                            <span>Notícia</span>
+                        </div>
+                    </label>
+
+                    <div class="card-details">
+                        <label for="<?= $cardId ?>" class="close-btn" aria-label="Fechar">×</label>
+
+                        <div class="detail-header">
+                            <div>
+                                <p class="eyebrow">Detalhes da notícia</p>
+                                <h3><?= escapar($noticia['nws_title']) ?></h3>
                             </div>
-                        </label>
+                            <span class="status-pill <?= $statusClasse ?>"><?= $statusTexto ?></span>
+                        </div>
 
-                        <div class="card-details">
-                            <label for="<?= $cardId ?>" class="close-btn" aria-label="Fechar">×</label>
+                        <?php if (imagemNoticiaDisponivel($noticia['nws_photo_url'])): ?>
+                            <img class="news-config-image" src="<?= escapar($noticia['nws_photo_url']) ?>" alt="Imagem da notícia: <?= escapar($noticia['nws_title']) ?>">
+                        <?php endif; ?>
 
-                            <div class="detail-header">
-                                <div>
-                                    <p class="eyebrow">Detalhes do atleta</p>
-                                    <h3><?= $nome ?></h3>
-                                </div>
-                                <span class="status-pill <?= $statusClasse ?>"><?= $statusTexto ?></span>
+                        <div class="detail-grid">
+                            <div>
+                                <span>ID</span>
+                                <strong>#<?= $id ?></strong>
                             </div>
-
-                            <div class="detail-grid">
-                                <div>
-                                    <span>ID</span>
-                                    <strong>#<?= $id ?></strong>
-                                </div>
-                                <div>
-                                    <span>CPF</span>
-                                    <strong><?= $cpf ?></strong>
-                                </div>
-                                <div>
-                                    <span>Nome</span>
-                                    <strong><?= $nome ?></strong>
-                                </div>
-                                <div>
-                                    <span>Gênero</span>
-                                    <strong><?= $genero ?></strong>
-                                </div>
-                                <div>
-                                    <span>Idade</span>
-                                    <strong><?= $idade ?> anos</strong>
-                                </div>
-                                <div>
-                                    <span>Data de nascimento</span>
-                                    <strong><?= $nascimento ?></strong>
-                                </div>
-                                <div>
-                                    <span>Posição</span>
-                                    <strong><?= $posicao ?></strong>
-                                </div>
-                                <div>
-                                    <span>Altura</span>
-                                    <strong><?= $altura ?> cm</strong>
-                                </div>
-                                <div>
-                                    <span>Contato</span>
-                                    <strong><?= htmlspecialchars($atleta['contact'] ?? '-') ?></strong>
-                                </div>
-                                <div>
-                                    <span>Cidade</span>
-                                    <strong><?= $cidade ?></strong>
-                                </div>
-                                <div>
-                                    <span>Equipe</span>
-                                    <strong><?= $equipe ?></strong>
-                                </div>
-                                <div>
-                                    <span>Instagram</span>
-                                    <strong><?= $instagram ?></strong>
-                                </div>
-                                <div>
-                                    <span>Forma de pagamento</span>
-                                    <strong><?= $metodoPagamento ?></strong>
-                                </div>
-                                <div>
-                                    <span>Cadastro realizado em</span>
-                                    <strong><?= $dataCadastro ?></strong>
-                                </div>
-                                <div>
-                                    <span>Mensalidade</span>
-                                    <strong><?= $pago ? 'Pago' : 'Pendente' ?></strong>
-                                </div>
+                            <div>
+                                <span>Categoria</span>
+                                <strong><?= escapar($noticia['nws_category']) ?></strong>
                             </div>
-
-                            <form action="../backend/process/pcs_togglePaid.php" method="POST" class="status-form">
-                                <input type="hidden" name="id" value="<?= $id ?>">
-                                <input type="hidden" name="paid" value="<?= $pago ? 'false' : 'true' ?>">
-                                <button type="submit" class="toggle-paid <?= $statusClasse ?>">
-                                    <?= $pago ? 'Marcar como pendente' : 'Marcar como pago' ?>
-                                </button>
-                            </form>
-
-                            <div class="detail-panel">
-                                <h4>Dados extras</h4>
-                                <p>Este espaço pode receber performance, frequência, avaliações, lesões e observações futuras.</p>
-                                <div class="chip-row">
-                                    <span class="chip">Performance</span>
-                                    <span class="chip">Frequência</span>
-                                    <span class="chip">Avaliações</span>
-                                </div>
+                            <div>
+                                <span>Criada em</span>
+                                <strong><?= escapar(formatarDataNoticia($noticia['nws_created_at'])) ?></strong>
+                            </div>
+                            <div>
+                                <span>Publicada em</span>
+                                <strong><?= escapar(formatarDataNoticia($noticia['nws_data_publicacao'])) ?></strong>
                             </div>
                         </div>
+
+                        <div class="detail-panel">
+                            <h4>Descrição</h4>
+                            <p><?= nl2br(escapar($noticia['nws_content'])) ?></p>
+                        </div>
                     </div>
-                    <?php
-                }
-            ?>
+                </article>
+            <?php endforeach; ?>
         </section>
 
-        <a href="home.php" class="back-link">← Voltar ao home</a>
+        <a href="news.php" class="back-link">+ Criar nova notícia</a>
     </main>
 
     <nav class="bottom-nav">
