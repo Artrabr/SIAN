@@ -1,44 +1,5 @@
 <?php
-/*
- * DADOS TEMPORÁRIOS DE TESTE
- *
- * Estes valores ainda não vêm do banco. Amanhã, substitua somente este bloco
- * pelas consultas usando a sessão do atleta. O restante do HTML já usa essas
- * três variáveis: $atleta, $equipe e $relatorioFinanceiro.
- */
-$atleta = [
-    'nome' => 'Lucas Almeida',
-    'posicao' => 'Ponteiro',
-    'equipe' => 'NOIA Vôlei Sub-21',
-    'instagram' => '@lucasalmeida',
-    'foto' => 'imagens/noialogo.png',
-    'financeiro' => 'Em dia',
-    'proximo_treino' => 'Quarta-feira, 18:00',
-];
-
-$equipe = [
-    ['nome' => 'Lucas Almeida', 'posicao' => 'Ponteiro', 'foto' => 'imagens/noialogo.png'],
-    ['nome' => 'Rafael Santos', 'posicao' => 'Levantador', 'foto' => 'imagens/noialogo.png'],
-    ['nome' => 'Matheus Oliveira', 'posicao' => 'Central', 'foto' => 'imagens/noialogo.png'],
-    ['nome' => 'João Pereira', 'posicao' => 'Oposto', 'foto' => 'imagens/noialogo.png'],
-];
-
-$relatorioFinanceiro = [
-    ['data' => '05/08/2026', 'tipo' => 'Mensalidade', 'status' => 'Pago'],
-    ['data' => '12/07/2026', 'tipo' => 'Mensalidade', 'status' => 'Pago'],
-    ['data' => '21/06/2026', 'tipo' => 'Diária', 'status' => 'Pago'],
-];
-
-$numeroWhatsApp = '5551999999999';
-$mensagemWhatsApp = static function (string $tipo) use ($atleta): string {
-    return rawurlencode(
-        "Olá! Gostaria de pagar a {$tipo} do atleta {$atleta['nome']}, da equipe {$atleta['equipe']}."
-    );
-};
-
-// Regra futura: depois do dia 5, ocultar o botão de mensalidade.
-// $podePagarMensalidade = (int) date('j') <= 5;
-$podePagarMensalidade = true;
+require_once __DIR__ . '/process/columProjection.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -67,7 +28,7 @@ $podePagarMensalidade = true;
                 <ul class="nav-menu client-nav-menu">
                     <li><a href="index.php" class="nav-link">Site oficial</a></li>
                     <li><a href="clientRegister.php" class="nav-link">Cadastro</a></li>
-                    <li><a href="index.php" class="btn-login">Sair / Logout</a></li>
+                    <li><a href="process/logout.php" class="btn-login">Sair / Logout</a></li>
                 </ul>
             </nav>
         </div>

@@ -71,7 +71,7 @@ $successMessage = $_GET['success'] ?? null;
                     <?php endif; ?>
 
                     <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 12px 14px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; color: #fca5a5;">
-                        <strong>*</strong> Para realizar o registro é preciso participar de ao menos um treino NOIA aonde avaliaremos seu CPF.
+                        <strong>*</strong> Para realizar o registro é preciso participar de ao menos um treino NOIA aonde validaremos seu CPF.
                     </div>
 
                     <form action="process/webregister.php" method="POST" class="register-form">

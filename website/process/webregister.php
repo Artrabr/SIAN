@@ -41,7 +41,7 @@ function cpfAutorizado($pdo, $cpf){ // retorna o cpf ['cpf_atl' = '123.123.123-0
 //                                CÓDIGO
 //========================================================================//
 
-$requiredFields = ['cpf', 'password', 'name', 'contact', 'birthDate', 'position', 'city', 'hight', 'payMethod', 'gender', 'team', 'instagram'];
+$requiredFields = ['cpf', 'password', 'name', 'contact', 'birthDate', 'position', 'city', 'hight', 'payMethod', 'gender', 'team'];
 
 if(!checkData($_POST, $requiredFields)) {
     header("Location: ../clientRegister.php?error=invalid_data");
@@ -87,7 +87,7 @@ try {
         ':position' => $_POST['position'],
         ':city' => $_POST['city'],
         ':hight' => (int) $_POST['hight'],
-        ':instagram' => trim($_POST['instagram']),
+        ':instagram' => trim($_POST['instagram'] ?? ''),
         ':payMethod' => $_POST['payMethod'],
         ':gender' => $_POST['gender'],
         ':team' => $_POST['team']

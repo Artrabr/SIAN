@@ -35,7 +35,6 @@
                             SIAN <span class="badge-sian">SISTEMA</span>
                         </a>
                     </li>
-                    <li><a href="clientRegister.php" class="nav-link">Cadastro</a></li>
                     <li>
                         <button class="btn-login" onclick="toggleLoginModal()">Login / Entrar</button>
                     </li>
@@ -302,7 +301,7 @@
                         <input type="text" name="contact" class="form-control" placeholder="(00) 00000-0000" required>
                     </div>
 
-                    <button type="submit" class="btn-cyan" style="width: 100%;">Enviar Cadastro</button>
+                    <button type="submit" class="btn-cyan" style="width: 100%;">Enviar</button>
                 </form>
             </div>
         </div>
@@ -395,12 +394,12 @@
 
                 <form method="POST" action="process/weblogin.php">
                     <div class="form-group">
-                        <label>Login</label>
-                        <input type="text" id="login-user" name="usuario" class="form-control" required>
+                        <label for="login-user">CPF</label>
+                        <input type="text" id="login-user" name="cpf" class="form-control" inputmode="numeric" autocomplete="username" required>
                     </div>
                     <div class="form-group">
-                        <label>Senha</label>
-                        <input type="password" name="senha" class="form-control" required>
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" name="password" class="form-control" autocomplete="current-password" required>
                     </div>
                     <button type="submit" class="btn-cyan" style="width: 100%;">Entrar na Área do Cliente</button>
                 </form>

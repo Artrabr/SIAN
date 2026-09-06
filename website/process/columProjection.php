@@ -1,4 +1,10 @@
 <?php
+ini_set('session.use_strict_mode', '1');
+session_set_cookie_params([
+    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
 session_start();
 
 require_once __DIR__ . '/../../backsistem/backend/data/conection.php';
@@ -21,7 +27,8 @@ function redirectTo($url){
 }
 
 function getLoggedAtletaId(){
-    return $_SESSION['id_atl'] ?? null;
+    $idAtleta = $_SESSION['id_atl'] ?? null;
+    return filter_var($idAtleta, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: null;
 }
 
 function isLogado($idAtl){
@@ -193,7 +200,7 @@ function diaDoMes(){
 $idAtleta = getLoggedAtletaId();
 
 if (!isLogado($idAtleta)) {
-    redirectTo('login.php');
+    redirectTo('index.php?login=required');
 }
 
 $pdo = conectMYSQL();
@@ -203,7 +210,7 @@ $dadosAtleta = buscarAtletaPorId($pdo, $idAtleta);
 if (!atletaExiste($dadosAtleta)) {
     encerrarSessao();
     desconectMYSQL($pdo);
-    redirectTo('login.php');
+    redirectTo('index.php?login=required');
 }
 
 $equipe = buscarEquipePorTime($pdo, $dadosAtleta['team_atl']);
