@@ -5,7 +5,7 @@ function conectMYSQL(){
     return conection::conectar();
 }
 
-function desconectMYSQL(&$pdo){
+function desconectMYSQL($pdo){
     $pdo = null;
 }
 
