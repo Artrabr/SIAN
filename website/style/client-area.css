@@ -4,6 +4,7 @@
 
 body.client-page {
     background: radial-gradient(circle at 85% 5%, rgba(0, 229, 255, 0.1), transparent 32%), var(--bg-dark);
+    color: #fff;
 }
 
 .client-main {
@@ -29,6 +30,19 @@ body.client-page {
 
 .client-page .brand-text {
     color: var(--client-text-main);
+}
+
+.client-page .client-nav-menu .nav-link,
+.client-page .client-nav-menu .btn-login {
+    color: #fff !important;
+    opacity: 1;
+}
+
+.client-page .client-nav-menu .nav-link:hover,
+.client-page .client-nav-menu .nav-link:focus-visible,
+.client-page .client-nav-menu .btn-login:hover,
+.client-page .client-nav-menu .btn-login:focus-visible {
+    color: #fff !important;
 }
 
 .client-page .section-title {

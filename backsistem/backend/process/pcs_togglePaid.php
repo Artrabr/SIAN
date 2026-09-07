@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../data/conection.php";
+require_once __DIR__ . "/../classes/payment.php";
 
 if (!isset($_POST['id'], $_POST['paid'])) {
     header("Location: ../../frontend/lists.php?error=invalid_request");
@@ -8,18 +9,40 @@ if (!isset($_POST['id'], $_POST['paid'])) {
 
 $id = (int) $_POST['id'];
 $paid = strtolower($_POST['paid']) === 'true';
+$tipoPagamento = $_POST['type_pgm'] ?? 'mensalidade';
+
+if (!in_array($tipoPagamento, ['mensalidade', 'diaria'], true)) {
+    header("Location: ../../frontend/lists.php?error=invalid_payment_type");
+    exit;
+}
 
 $pdo = conection::conectar();
 $pdo->beginTransaction();
 
 try {
     if ($paid) {
+        $dataPagamento = date('Y-m-d');
+        $dataExpiracao = calcularDataExpiracao($tipoPagamento, $dataPagamento);
         $stmt = $pdo->prepare(
-            "INSERT INTO payments (payday, expired, atl_id)
-             SELECT CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), :id
-             WHERE NOT EXISTS (SELECT 1 FROM payments WHERE atl_id = :id_check)"
+            "INSERT INTO payments (payday, expired, atl_id, type_pgm)
+             SELECT :payday, :expired, :id, :type_pgm
+             WHERE NOT EXISTS (
+                 SELECT 1
+                 FROM payments
+                 WHERE atl_id = :id_check
+                   AND payday = :payday_check
+                   AND type_pgm = :type_check
+             )"
         );
-        $stmt->execute([':id' => $id, ':id_check' => $id]);
+        $stmt->execute([
+            ':payday' => $dataPagamento,
+            ':expired' => $dataExpiracao,
+            ':id' => $id,
+            ':type_pgm' => $tipoPagamento,
+            ':id_check' => $id,
+            ':payday_check' => $dataPagamento,
+            ':type_check' => $tipoPagamento,
+        ]);
     } else {
         $stmt = $pdo->prepare("DELETE FROM payments WHERE atl_id = :id");
         $stmt->execute([':id' => $id]);

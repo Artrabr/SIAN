@@ -22,12 +22,10 @@ require_once __DIR__ . '/process/columProjection.php';
                 <a href="index.php" class="crest-header" aria-label="Voltar para o site do NOIA Vôlei">
                     <img src="imagens/noialogo.png" alt="Logo NOIA Vôlei" class="logo-size01">
                 </a>
-                <div class="brand-text">NOIA <span>VÔLEI</span></div>
+                <div class="brand-text">Area do <span>atleta</span></div>
             </div>
             <nav aria-label="Navegação principal">
                 <ul class="nav-menu client-nav-menu">
-                    <li><a href="index.php" class="nav-link">Site oficial</a></li>
-                    <li><a href="clientRegister.php" class="nav-link">Cadastro</a></li>
                     <li><a href="process/logout.php" class="btn-login">Sair / Logout</a></li>
                 </ul>
             </nav>
@@ -49,7 +47,7 @@ require_once __DIR__ . '/process/columProjection.php';
                 <div class="section-header compact-header">
                     <div>
                         <h2 class="section-title">Resumo</h2>
-                        <p class="section-subtitle">Seus principais indicadores.</p>
+                        <p class="section-subtitle">Seus principais indicadores</p>
                     </div>
                 </div>
                 <div class="row g-3">
@@ -60,13 +58,17 @@ require_once __DIR__ . '/process/columProjection.php';
                             <span class="card-note">Nenhuma pendência registrada</span>
                         </article>
                     </div>
+            
+                    <!--
                     <div class="col-12 col-md-6 col-xl-4">
                         <article class="client-card metric-card">
                             <span class="card-label">Próximo treino</span>
                             <strong class="metric-value">18:00</strong>
-                            <span class="card-note"><?= htmlspecialchars($atleta['proximo_treino']) ?></span>
+                            <span class="card-note"> ?= htmlspecialchars($atleta['proximo_treino']) ?></span>
                         </article>
                     </div>
+                    -->
+
                     <div class="col-12 col-md-6 col-xl-4">
                         <article class="client-card metric-card">
                             <span class="card-label">Equipe</span>

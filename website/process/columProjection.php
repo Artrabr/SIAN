@@ -1,13 +1,10 @@
 <?php
-ini_set('session.use_strict_mode', '1');
-session_set_cookie_params([
-    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-    'httponly' => true,
-    'samesite' => 'Lax',
-]);
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once __DIR__ . '/../../backsistem/backend/data/conection.php';
+require_once __DIR__ . '/../../backsistem/backend/classes/payment.php';
 
 //========================================================================//
 //                                FUNÇÕES
@@ -48,7 +45,7 @@ function buscarAtletaPorId($pdo, $idAtl){
 function prepararBuscaAtleta($pdo){
     // Nunca selecionar: cpf_atl, password_atl, contact_atl, payMethod_atl, birthDate_atl.
     return $pdo->prepare("
-        SELECT name_atl, position_atl, team_atl, instagram_atl
+        SELECT name_atl, position_atl, team_atl, instagram_atl, created_at
         FROM athlete
         WHERE id_atl = :id
     ");
@@ -105,7 +102,7 @@ function buscarPagamentosPorAtleta($pdo, $idAtl){
 
 function prepararBuscaPagamentos($pdo){
     return $pdo->prepare("
-        SELECT payday, expired
+        SELECT payday, expired, type_pgm
         FROM payments
         WHERE atl_id = :id
         ORDER BY payday DESC
@@ -123,9 +120,13 @@ function montarRelatorioFinanceiro($pagamentos){
 function montarLinhaRelatorio($pagamento){
     return [
         'data'   => formatarData($pagamento['payday']),
-        'tipo'   => 'Mensalidade',
+        'tipo'   => formatarTipoPagamento($pagamento['type_pgm']),
         'status' => calcularStatusPagamento($pagamento['expired']),
     ];
+}
+
+function formatarTipoPagamento($tipoPagamento){
+    return $tipoPagamento === 'diaria' ? 'Diária' : 'Mensalidade';
 }
 
 function formatarData($data){
@@ -133,7 +134,7 @@ function formatarData($data){
 }
 
 function calcularStatusPagamento($dataVencimento){
-    return estaVencido($dataVencimento) ? 'Atrasado' : 'Pago';
+    return estaVencido($dataVencimento) ? 'Vencido' : 'Vigente';
 }
 
 function estaVencido($dataVencimento){
@@ -144,15 +145,47 @@ function estaVencido($dataVencimento){
 
 function estaEmDia($relatorioFinanceiro){
     foreach ($relatorioFinanceiro as $linha) {
-        if ($linha['status'] === 'Atrasado') {
+        if ($linha['status'] === 'Vencido') {
             return false;
         }
     }
     return true;
 }
 
-function statusFinanceiroTexto($emDia){
-    return $emDia ? 'Em dia' : 'Pendente';
+function statusFinanceiroTexto($relatorioFinanceiro){
+    if (empty($relatorioFinanceiro)) {
+        return 'Sem registro';
+    }
+
+    return estaEmDia($relatorioFinanceiro) ? 'Em dia' : 'Pendente';
+}
+
+function calcularLimitePrimeiroPagamento($dataCadastro){
+    $data = new DateTime($dataCadastro);
+
+    if ((int) $data->format('d') < 5) {
+        $data->setDate((int) $data->format('Y'), (int) $data->format('m'), 5);
+    } else {
+        $data->modify('first day of next month');
+        $data->setDate((int) $data->format('Y'), (int) $data->format('m'), 5);
+    }
+
+    return $data;
+}
+
+function statusFinanceiroComGratuidade($relatorioFinanceiro, $dataCadastro){
+    if (!empty($relatorioFinanceiro)) {
+        return statusFinanceiroTexto($relatorioFinanceiro);
+    }
+
+    $limite = calcularLimitePrimeiroPagamento($dataCadastro);
+    $hoje = new DateTime('today');
+
+    if ($hoje <= $limite) {
+        return 'Gratuito até ' . $limite->format('d/m/Y');
+    }
+
+    return 'Sem registro';
 }
 
 function proximoTreinoTexto(){
@@ -164,14 +197,14 @@ function montarInstagram($instagram){
     return '@' . ltrim($instagram, '@');
 }
 
-function createAtletaView($dadosAtleta, $emDia){
+function createAtletaView($dadosAtleta, $relatorioFinanceiro){
     return [
         'nome'           => $dadosAtleta['name_atl'],
         'posicao'        => $dadosAtleta['position_atl'],
         'equipe'         => $dadosAtleta['team_atl'],
         'instagram'      => montarInstagram($dadosAtleta['instagram_atl']),
         'foto'           => fotoPadrao(),
-        'financeiro'     => statusFinanceiroTexto($emDia),
+        'financeiro'     => statusFinanceiroComGratuidade($relatorioFinanceiro, $dadosAtleta['created_at']),
         'proximo_treino' => proximoTreinoTexto(),
     ];
 }
@@ -217,9 +250,7 @@ $equipe = buscarEquipePorTime($pdo, $dadosAtleta['team_atl']);
 
 $pagamentos = buscarPagamentosPorAtleta($pdo, $idAtleta);
 $relatorioFinanceiro = montarRelatorioFinanceiro($pagamentos);
-$emDia = estaEmDia($relatorioFinanceiro);
-
-$atleta = createAtletaView($dadosAtleta, $emDia);
+$atleta = createAtletaView($dadosAtleta, $relatorioFinanceiro);
 
 desconectMYSQL($pdo);
 
