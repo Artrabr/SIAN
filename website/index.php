@@ -399,11 +399,11 @@
                 <form method="POST" action="process/weblogin.php">
                     <div class="form-group">
                         <label for="login-user">CPF</label>
-                        <input type="text" id="login-user" name="cpf" class="form-control" inputmode="numeric" autocomplete="username" required>
+                        <input type="text" id="login-user" name="cpf" class="form-control" inputmode="numeric" autocomplete="username" placeholder="digite seu cpf ex: xxx.xxx.xxx-xx" required>
                     </div>
                     <div class="form-group">
                         <label for="login-password">Senha</label>
-                        <input type="password" id="login-password" name="password" class="form-control" autocomplete="current-password" required>
+                        <input type="password" id="login-password" name="password" class="form-control" autocomplete="current-password" placeholder="digite sua senha ex: xxx"required>
                     </div>
                     <button type="submit" class="btn-cyan" style="width: 100%;">Entrar na Área do Cliente</button>
                 </form>
