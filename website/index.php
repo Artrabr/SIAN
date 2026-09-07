@@ -180,37 +180,33 @@
             </div>
 
             <div class="players-grid">
-                <!-- Atleta 1 -->
-                <div class="player-card">
-                    <span class="player-num">10</span>
-                    <div class="player-photo-placeholder">[ FOTO ATLETA ]</div>
-                    <h3 class="player-name">Carlos "Kapow"</h3>
-                    <span class="player-pos">Ponteiro / Capitão</span>
-                </div>
+<?php
+#PHP START
+        //============================================================================
+        //                     pegando os valores das variaveis
+        function getContentAthelete($pdo){
+            $stmt = $pdo->query("SELECT name_atl, position_atl, birthDate_atl, team_atl FROM athlete ORDER BY created_at DESC");
+            return $stmt->fetchAll();
+        }
+        $dataAthelte = getContentAthelete($pdo);
+        //----------------------------------------------------------------------------
 
-                <!-- Atleta 2 -->
+        foreach($dataAthelte as $athlete):
+            //$photo     = htmlspecialchars('../backsistem/' . ltrim($athlete['nws_photo_url'] ?? '', './'));
+            $team  = htmlspecialchars($athlete['team_atl'] ?? 'Notícia');
+            $name     = htmlspecialchars($athlete['name_atl'] ?? '');
+            $position   = htmlspecialchars($athlete['position_atl'] ?? '');
+            $birth      = htmlspecialchars($athlete['birthDate_atl'] ?? '');
+        ?>
                 <div class="player-card">
-                    <span class="player-num">07</span>
-                    <div class="player-photo-placeholder">[ FOTO ATLETA ]</div>
-                    <h3 class="player-name">Lucas Silva</h3>
-                    <span class="player-pos">Levantador</span>
+                    <!--<div class="player-photo-placeholder">[ FOTO ATLETA ]</div>-->
+                    <h3 class="player-name"><?=$name?></h3>
+                    <span class="player-pos"><?=$position?></span>
                 </div>
-
-                <!-- Atleta 3 -->
-                <div class="player-card">
-                    <span class="player-num">18</span>
-                    <div class="player-photo-placeholder">[ FOTO ATLETA ]</div>
-                    <h3 class="player-name">Mateus Rocha</h3>
-                    <span class="player-pos">Central</span>
-                </div>
-
-                <!-- Atleta 4 -->
-                <div class="player-card">
-                    <span class="player-num">01</span>
-                    <div class="player-photo-placeholder">[ FOTO ATLETA ]</div>
-                    <h3 class="player-name">Gabriel Santos</h3>
-                    <span class="player-pos">Líbero</span>
-                </div>
+<?php
+#PHP END
+        endforeach;
+?>
             </div>
         </div>
     </section>
