@@ -108,6 +108,7 @@
     <!-- ==========================================
          SEÇÃO INÍCIO: DESTAQUES E NOTÍCIAS
          ========================================== -->
+
     <section>
         <div class="container">
             <div class="section-header">
@@ -122,35 +123,41 @@
                 <span class="php-comment">// ESPAÇO PHP: Loop de notícias recentes integradas via CMS / SIAN</span><br>
                 <span class="php-tag">?&gt;</span>
             </div>
-
             <div class="news-grid">
-                <div class="news-card">
-                    <div class="news-img-placeholder">[ FOTO DA PARTIDA / NOTÍCIA ]</div>
-                    <div class="news-body">
-                        <span class="news-tag">Vitória</span>
-                        <h3 class="news-title">Noia Vôlei vence o clássico no tie-break e avança para as finais</h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem;">Com atuação impecável do sistema defensivo, a equipe garantiu a vaga na decisão...</p>
-                    </div>
-                </div>
+    <?php
+#PHP START
+        //============================================================================
+        //                     pegando os valores das variaveis
 
-                <div class="news-card">
-                    <div class="news-img-placeholder">[ FOTO DA PENEIRA ]</div>
-                    <div class="news-body">
-                        <span class="news-tag">Base</span>
-                        <h3 class="news-title">Abertas as inscrições para a Peneira Sub-19 e Sub-21</h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem;">Buscamos novos talentos para integrar o projeto na próxima temporada de competições...</p>
-                    </div>
-                </div>
+        require_once __DIR__ . "/../backsistem/backend/data/conection.php";
+        $pdo = conection::conectar();
+        function getContent($pdo){
+            $stmt = $pdo->query("SELECT nws_title, nws_category, nws_content, nws_photo_url, nws_data_publicacao FROM news WHERE nws_status = 1 ORDER BY nws_data_publicacao DESC, nws_id DESC");
+            return $stmt->fetchAll();
+        }
+        $newsPosted = getContent($pdo);
+        //----------------------------------------------------------------------------
 
-                <div class="news-card">
-                    <div class="news-img-placeholder">[ FOTO SIAN / TECNOLOGIA ]</div>
-                    <div class="news-body">
-                        <span class="news-tag">Tecnologia</span>
-                        <h3 class="news-title">Sistema SIAN passa a gerenciar 100% da preparação física do elenco</h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem;">Plataforma desenvolvida internamente otimizou rendimento e prevenção de lesões...</p>
-                    </div>
+        foreach($newsPosted as $news):
+            $photo     = htmlspecialchars('../backsistem/' . ltrim($news['nws_photo_url'] ?? '', './'));
+            $category  = htmlspecialchars($news['nws_category'] ?? 'Notícia');
+            $title     = htmlspecialchars($news['nws_title'] ?? '');
+            $content   = htmlspecialchars($news['nws_content'] ?? '');
+            $date      = htmlspecialchars($news['nws_data_publicacao'] ?? '');
+        ?>
+            <div class="news-card">
+                <div class="news-img-placeholder"><img src="<?=$photo?>" alt="news photo"></div>
+                <div class="news-body">
+                    <span class="news-tag"><?=$category?></span>
+                    <h3 class="news-title"><?=$title?></h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;"><?=$content?></p>
                 </div>
-            </div>
+            </div>  
+        <?php
+        endforeach;
+#PHP END
+        ?>
+        </div>
         </div>
     </section>
 
