@@ -146,7 +146,7 @@ require_once __DIR__ . '/process/columProjection.php';
                         </div>
                     <?php endif; ?>
                     <div class="col-12 col-md-6">
-                        <a class="payment-action" href="https://api.whatsapp.com/send?phone=<?= $numeroWhatsApp ?>&text=<?= $mensagemWhatsApp('diária') ?>" target="_blank" rel="noopener">
+                        <a class="payment-action" href="https://api.whatsapp.com/send?phone=<?= $numeroWhatsApp ?>&text=<?= $mensagemWhatsApp('diaria') ?>" target="_blank" rel="noopener">
                             <span class="payment-icon">1D</span>
                             <span><strong>Pagar diária</strong><small>Solicite o valor atualizado</small></span>
                             <span aria-hidden="true">&#8594;</span>

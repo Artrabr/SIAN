@@ -210,7 +210,7 @@ function createAtletaView($dadosAtleta, $relatorioFinanceiro){
 }
 
 function numeroWhatsAppPadrao(){
-    return '5551999999999';
+    return '5551996856468';
 }
 
 function montarMensagemWhatsApp($tipo, $atleta){
