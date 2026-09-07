@@ -117,12 +117,6 @@
                     <p class="section-subtitle">Fique por dentro de tudo o que acontece no Noia Vôlei</p>
                 </div>
             </div>
-
-            <div class="php-block">
-                <span class="php-tag">&lt;?php</span><br>
-                <span class="php-comment">// ESPAÇO PHP: Loop de notícias recentes integradas via CMS / SIAN</span><br>
-                <span class="php-tag">?&gt;</span>
-            </div>
             <div class="news-grid">
     <?php
 #PHP START
@@ -185,12 +179,6 @@
                 <button class="tab-btn">Comissão Técnica</button>
             </div>
 
-            <div class="php-block">
-                <span class="php-tag">&lt;?php</span><br>
-                <span class="php-comment">// ESPAÇO PHP: Query para buscar elenco ativo por categoria</span><br>
-                <span class="php-tag">?&gt;</span>
-            </div>
-
             <div class="players-grid">
                 <!-- Atleta 1 -->
                 <div class="player-card">
@@ -247,12 +235,6 @@
                     <p style="color: var(--text-muted); margin-bottom: 20px;">
                         Realizamos testes periodicos para nossas categorias masculinas e femininas. Preencha seus dados para entrar na fila de ingresso na equipe.
                     </p>
-
-                    <div class="php-block">
-                        <span class="php-tag">&lt;?php</span><br>
-                        <span class="php-comment">// ESPAÇO PHP: Processamento do formulário de pré-inscrição (envio para o banco / SIAN)</span><br>
-                        <span class="php-tag">?&gt;</span>
-                    </div>
                 </div>
 
                 <form action="../backsistem/backend/process/website/psc_newCandidate.php" method="POST">
@@ -344,12 +326,6 @@
                     O <strong>SIAN</strong> é a plataforma tecnológica proprietária do <strong>NOIA VÔLEI</strong>, desenvolvida para integrar toda a gestão de atletas, treinos, frequência, dados de desempenho e controle financeiro da equipe.
                 </p>
 
-                <div class="php-block">
-                    <span class="php-tag">&lt;?php</span><br>
-                    <span class="php-comment">// ESPAÇO PHP: Módulo de integração de APIs do SIAN no site público</span><br>
-                    <span class="php-tag">?&gt;</span>
-                </div>
-
                 <div class="sian-features">
                     <div class="sian-feat-item">
                         <h4>📊 Gestão de Performance</h4>
@@ -401,12 +377,6 @@
                 <div style="text-align: center; margin-bottom: 20px;">
                     <div class="crest-placeholder crest-card" style="margin: 0 auto 10px auto;"><img src="imagens/noialogo.png" alt="logo noia" class="logo-size01"></div>
                     <h3 style="font-family: var(--font-heading);">Acessar Conta</h3>
-                </div>
-
-                <div class="php-block">
-                    <span class="php-tag">&lt;?php</span><br>
-                    <span class="php-comment">// ESPAÇO PHP: Validação de login e inicialização de $_SESSION</span><br>
-                    <span class="php-tag">?&gt;</span>
                 </div>
 
                 <form method="POST" action="process/weblogin.php">
@@ -476,13 +446,7 @@
                     </p>
                 </div>
             </div>
-
-            <div class="php-block" style="text-align: center;">
-                <span class="php-tag">&lt;?php</span> 
-                <span class="php-comment">// ESPAÇO PHP: Rodapé dinâmico / direitos autorais e inclusões de scripts</span> 
-                <span class="php-tag">?&gt;</span>
-            </div>
-
+        
             <div class="footer-bottom">
                 &copy; <?php echo date("Y"); ?> NOIA VÔLEI & SIAN System. Todos os direitos reservados.
             </div>
