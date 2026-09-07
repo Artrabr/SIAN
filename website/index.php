@@ -371,7 +371,7 @@
                     <p style="color: var(--text-muted); max-width: 800px; margin: 0 auto 15px auto;">
                         O SIAN não é exclusivo do Noia Vôlei! Comercializamos e adaptamos o sistema para outras equipes esportivas, academias, ligas e empresas que buscam alta performance em gestão de pessoas e métricas.
                     </p>
-                    <button class="btn-cyan" onclick="alert('Entre em contato comercial pelo e-mail: comercial@sian.com.br');">Solicitar Demonstração Comercial</button>
+                    <button class="btn-cyan" onclick="alert('Entre em contato comercial pelo whatsapp: +55 (51) 996856468');">Solicitar Demonstração Comercial</button>
                 </div>
             </div>
         </div>
