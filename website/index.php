@@ -167,36 +167,57 @@
                 </div>
             </div>
 
+<?php
+        $teamStmt = $pdo->query("SELECT DISTINCT team_atl FROM athlete ORDER BY team_atl");
+        $teamPossible = $teamStmt->fetchAll(PDO::FETCH_COLUMN);
+
+        // Lê o filtro vindo da URL e só aceita valores existentes no banco.
+        $teamFilter = $_GET['team'] ?? '';
+        $teamFilter = in_array($teamFilter, $teamPossible, true) ? $teamFilter : '';
+?>
+
             <button class="team-menu-toggle" type="button" aria-expanded="false" aria-controls="team-navigation">
                 <span aria-hidden="true">☰</span>
                 <span>Selecionar equipe</span>
             </button>
 
             <div class="team-tabs" id="team-navigation">
-                <button class="tab-btn active">Masculino Principal</button>
-                <button class="tab-btn">Feminino Principal</button>
-                <button class="tab-btn">Sub-21 Base</button>
-                <button class="tab-btn">Comissão Técnica</button>
+                <a href="index.php?team=masculino#equipes" class="tab-btn <?= $teamFilter === 'masculino' ? 'active' : '' ?>">Masculino Principal</a>
+                <a href="index.php?team=feminino#equipes" class="tab-btn <?= $teamFilter === 'feminino' ? 'active' : '' ?>">Feminino Principal</a>
+                <!--<a href="index.php#equipes?team=timedeescolha" class="tab-btn">Comissão Técnica</a> //adicionar-->
             </div>
 
             <div class="players-grid">
 <?php
 #PHP START
-        //============================================================================
         //                     pegando os valores das variaveis
-        function getContentAthelete($pdo){
-            $stmt = $pdo->query("SELECT name_atl, position_atl, birthDate_atl, team_atl FROM athlete ORDER BY created_at DESC");
+        function getContentAthelete($pdo, $teamFilter){
+            $sql = "SELECT name_atl, position_atl, birthDate_atl, team_atl
+                    FROM athlete";
+
+            if ($teamFilter !== '') {
+                $sql .= " WHERE team_atl = :team";
+            }
+
+            $sql .= " ORDER BY created_at DESC";
+            $stmt = $pdo->prepare($sql);
+
+            if ($teamFilter !== '') {
+                $stmt->bindValue(':team', $teamFilter, PDO::PARAM_STR);
+            }
+
+            $stmt->execute();
             return $stmt->fetchAll();
         }
-        $dataAthelte = getContentAthelete($pdo);
+        $dataAthelte = getContentAthelete($pdo, $teamFilter);
         //----------------------------------------------------------------------------
 
         foreach($dataAthelte as $athlete):
-            //$photo     = htmlspecialchars('../backsistem/' . ltrim($athlete['nws_photo_url'] ?? '', './'));
-            $team  = htmlspecialchars($athlete['team_atl'] ?? 'Notícia');
-            $name     = htmlspecialchars($athlete['name_atl'] ?? '');
-            $position   = htmlspecialchars($athlete['position_atl'] ?? '');
-            $birth      = htmlspecialchars($athlete['birthDate_atl'] ?? '');
+            //$photo     =   htmlspecialchars('../backsistem/' . ltrim($athlete['nws_photo_url'] ?? '', './'));
+            $team        =   htmlspecialchars($athlete['team_atl'] ?? 'Notícia');
+            $name        =   htmlspecialchars($athlete['name_atl'] ?? '');
+            $position    =   htmlspecialchars($athlete['position_atl'] ?? '');
+            $birth       =   htmlspecialchars($athlete['birthDate_atl'] ?? '');
         ?>
                 <div class="player-card">
                     <!--<div class="player-photo-placeholder">[ FOTO ATLETA ]</div>-->
