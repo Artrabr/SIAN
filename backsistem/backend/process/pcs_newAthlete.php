@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . "/../data/conection.php";
+include_once __DIR__ . "/../classes/team.php";
 
 //========================================================================//
 //                               FUNÇÕES
@@ -48,6 +49,19 @@ function cpfJaExiste($pdo, $cpf) {
     return $stmt->fetchColumn() !== false;
 }
 
+function normalizarGeneroEquipe($genero){
+    return $genero === 'homem' ? 'masculino' : 'feminino';
+}
+
+function equipeValidaParaAtleta($pdo, $equipe, $genero){
+    return equipePodeReceberGenero($pdo, $equipe, normalizarGeneroEquipe($genero));
+}
+
+function atualizarTotalAtletasEquipe($pdo, $equipe){
+    $stmt = $pdo->prepare("UPDATE teams SET t_totalAthletes = COALESCE(t_totalAthletes, 0) + 1 WHERE t_name = :name");
+    $stmt->execute(['name' => $equipe]);
+}
+
 function enviarDadosMYSQL($pdo, $data) {
     $cpf = sanitizeCpf($data['cpf']);
     
@@ -93,8 +107,16 @@ try {
         header("Location: ../../frontend/registration.php?error=cpf_already_exists");
         exit();
     }
+
+    if (!equipeValidaParaAtleta($pdo, $_POST['team'], $_POST['gender'])) {
+        header("Location: ../../frontend/registration.php?error=invalid_team");
+        exit();
+    }
     
+    $pdo->beginTransaction();
     enviarDadosMYSQL($pdo, $_POST);
+    atualizarTotalAtletasEquipe($pdo, $_POST['team']);
+    $pdo->commit();
     $pdo = null;
     
     header("Location: ../../frontend/registration.php?success=athlete_created");

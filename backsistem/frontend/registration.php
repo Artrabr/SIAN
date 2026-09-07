@@ -1,3 +1,10 @@
+<?php
+require_once __DIR__ . '/../backend/data/conection.php';
+require_once __DIR__ . '/../backend/classes/team.php';
+
+$pdo = conection::conectar();
+$equipes = buscarEquipesDisponiveis($pdo);
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -77,10 +84,11 @@
             <label for="team">Equipe:</label>
             <select name="team" id="team" required>
                 <option value="">Selecione</option>
-                <option value="a">Equipe a</option>
-                <option value="b">Equipe b</option>
-                <option value="c">Equipe c</option>
-                <option value="d">Equipe d</option>
+                <?php foreach ($equipes as $equipe): ?>
+                    <option value="<?= htmlspecialchars($equipe['t_name'], ENT_QUOTES, 'UTF-8') ?>" data-gender="<?= htmlspecialchars($equipe['t_gender'], ENT_QUOTES, 'UTF-8') ?>">
+                        <?= htmlspecialchars($equipe['t_name'], ENT_QUOTES, 'UTF-8') ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
 
             <button type="submit">Criar atleta</button>
@@ -97,6 +105,31 @@
         <a href="news.php"><i class="fa-solid fa-newspaper"></i></a>
         <a href="newsConfig.php"><i class="fa-brands fa-leanpub"></i></a>
         <a href="authorization.php"><i class="fa-solid fa-user-gear"></i></a>
+        <a href="teamRegistration.php"><i class="fa-solid fa-arrows-down-to-people"></i></a>
+        <a href="teams.php"><i class="fa-solid fa-people-group"></i></a>
     </nav>
+    <script>
+        const genderSelect = document.getElementById('gender');
+        const teamSelect = document.getElementById('team');
+
+        function filtrarEquipes() {
+            const gender = genderSelect.value;
+            const teamGender = gender === 'homem' ? 'masculino' : 'feminino';
+
+            Array.from(teamSelect.options).forEach(function (option) {
+                if (!option.value) return;
+                const disponivel = option.dataset.gender === teamGender || option.dataset.gender === 'misto';
+                option.hidden = !disponivel;
+                option.disabled = !disponivel;
+            });
+
+            if (teamSelect.selectedOptions[0] && teamSelect.selectedOptions[0].disabled) {
+                teamSelect.value = '';
+            }
+        }
+
+        genderSelect.addEventListener('change', filtrarEquipes);
+        filtrarEquipes();
+    </script>
 </body>
 </html>

@@ -1,4 +1,8 @@
 <?php
+require_once __DIR__ . '/../backsistem/backend/data/conection.php';
+require_once __DIR__ . '/../backsistem/backend/classes/team.php';
+$pdo = conection::conectar();
+$equipesDisponiveis = buscarEquipesDisponiveis($pdo);
 $errorMessage = $_GET['error'] ?? null;
 $successMessage = $_GET['success'] ?? null;
 ?>
@@ -161,8 +165,11 @@ $successMessage = $_GET['success'] ?? null;
                                 <label for="team">Time</label>
                                 <select id="team" name="team" class="form-control" required>
                                     <option value="">Selecione...</option>
-                                    <option value="masculino">Masculino</option>
-                                    <option value="feminino">Feminino</option>
+                                    <?php foreach ($equipesDisponiveis as $equipe): ?>
+                                        <option value="<?= htmlspecialchars($equipe['t_name'], ENT_QUOTES, 'UTF-8') ?>" data-gender="<?= htmlspecialchars($equipe['t_gender'], ENT_QUOTES, 'UTF-8') ?>">
+                                            <?= htmlspecialchars($equipe['t_name'], ENT_QUOTES, 'UTF-8') ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
 
@@ -181,6 +188,27 @@ $successMessage = $_GET['success'] ?? null;
         </div>
     </main>
     <script>
+        const genderSelect = document.getElementById('gender');
+        const teamSelect = document.getElementById('team');
+
+        function filtrarEquipes() {
+            const teamGender = genderSelect.value === 'homem' ? 'masculino' : 'feminino';
+
+            Array.from(teamSelect.options).forEach(function (option) {
+                if (!option.value) return;
+                const disponivel = option.dataset.gender === teamGender || option.dataset.gender === 'misto';
+                option.hidden = !disponivel;
+                option.disabled = !disponivel;
+            });
+
+            if (teamSelect.selectedOptions[0] && teamSelect.selectedOptions[0].disabled) {
+                teamSelect.value = '';
+            }
+        }
+
+        genderSelect.addEventListener('change', filtrarEquipes);
+        filtrarEquipes();
+
         const registerSlides = document.querySelectorAll('.register-bg-slide');
         let registerSlideIndex = 0;
 

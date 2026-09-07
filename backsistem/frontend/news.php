@@ -74,13 +74,15 @@ $mensagem = $_GET['status'] ?? null;
     </main>
 
     <nav class="bottom-nav">
-        <a href="home.php"><i class="fa-regular fa-house" aria-label="Início"></i></a>
-        <a href="lists.php"><i class="fa-solid fa-list" aria-label="Atletas"></i></a>
-        <a href="candidates.php"><i class="fa-solid fa-inbox" aria-label="Candidatos"></i></a>
-        <a href="registration.php"><i class="fa-solid fa-user-pen" aria-label="Cadastrar"></i></a>
-        <a href="news.php" class="active"><i class="fa-solid fa-newspaper" aria-label="Notícias"></i></a>
+        <a href="home.php"><i class="fa-slab-press-duo fa-regular fa-house"></i></a>
+        <a href="lists.php"><i class="fa-solid fa-list"></i></a>
+        <a href="candidates.php"><i class="fa-solid fa-inbox"></i></a>
+        <a href="registration.php"><i class="fa-solid fa-user-pen"></i></a>
+        <a href="news.php" class="active"><i class="fa-solid fa-newspaper"></i></a>
         <a href="newsConfig.php"><i class="fa-brands fa-leanpub"></i></a>
-        <a href="authorization.php"><i class="fa-solid fa-user-gear" aria-label="Autorizações"></i></a>
+        <a href="authorization.php"><i class="fa-solid fa-user-gear"></i></a>
+        <a href="teamRegistration.php"><i class="fa-solid fa-arrows-down-to-people"></i></a>
+        <a href="teams.php"><i class="fa-solid fa-people-group"></i></a>
     </nav>
 
     <script>

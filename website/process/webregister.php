@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../backsistem/backend/data/conection.php';
+require_once __DIR__ . '/../../backsistem/backend/classes/team.php';
 
 function checkData($data, array $value){ 
 
@@ -13,6 +14,15 @@ function checkData($data, array $value){
 
 function sanitizeCpf($cpf) {
     return preg_replace('/\D+/', '', (string) $cpf);
+}
+
+function normalizarGeneroEquipe($genero){
+    return $genero === 'homem' ? 'masculino' : 'feminino';
+}
+
+function atualizarTotalAtletasEquipe($pdo, $equipe){
+    $stmt = $pdo->prepare("UPDATE teams SET t_totalAthletes = COALESCE(t_totalAthletes, 0) + 1 WHERE t_name = :name");
+    $stmt->execute(['name' => $equipe]);
 }
 
 function validarCpf($cpf) {
@@ -71,6 +81,11 @@ try {
         header("Location: ../clientRegister.php?error=cpf_already_registered");
         exit();
     }
+
+    if (!equipePodeReceberGenero($pdo, $_POST['team'], normalizarGeneroEquipe($_POST['gender']))) {
+        header("Location: ../clientRegister.php?error=invalid_team");
+        exit();
+    }
     
     // Insere o novo atleta
     $password_hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
@@ -78,6 +93,7 @@ try {
         (cpf_atl, password_atl, name_atl, contact_atl, birthDate_atl, position_atl, city_atl, hight_atl, instagram_atl, payMethod_atl, gender_atl, team_atl)
         VALUES (:cpf, :password, :name, :contact, :birthDate, :position, :city, :hight, :instagram, :payMethod, :gender, :team)");
     
+    $pdo->beginTransaction();
     $stmt->execute([
         ':cpf' => $cpf,
         ':password' => $password_hash,
@@ -92,6 +108,8 @@ try {
         ':gender' => $_POST['gender'],
         ':team' => $_POST['team']
     ]);
+    atualizarTotalAtletasEquipe($pdo, $_POST['team']);
+    $pdo->commit();
     
     $pdo = null;
     

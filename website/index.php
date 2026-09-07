@@ -124,7 +124,9 @@
         //                     pegando os valores das variaveis
 
         require_once __DIR__ . "/../backsistem/backend/data/conection.php";
+        require_once __DIR__ . "/../backsistem/backend/classes/team.php";
         $pdo = conection::conectar();
+        $equipesDisponiveis = buscarEquipesDisponiveis($pdo);
         function getContent($pdo){
             $stmt = $pdo->query("SELECT nws_title, nws_category, nws_content, nws_photo_url, nws_data_publicacao FROM news WHERE nws_status = 1 ORDER BY nws_data_publicacao DESC, nws_id DESC");
             return $stmt->fetchAll();
@@ -168,8 +170,7 @@
             </div>
 
 <?php
-        $teamStmt = $pdo->query("SELECT DISTINCT team_atl FROM athlete ORDER BY team_atl");
-        $teamPossible = $teamStmt->fetchAll(PDO::FETCH_COLUMN);
+        $teamPossible = array_column($equipesDisponiveis, 't_name');
 
         // Lê o filtro vindo da URL e só aceita valores existentes no banco.
         $teamFilter = $_GET['team'] ?? '';
@@ -182,9 +183,11 @@
             </button>
 
             <div class="team-tabs" id="team-navigation">
-                <a href="index.php?team=masculino#equipes" class="tab-btn <?= $teamFilter === 'masculino' ? 'active' : '' ?>">Masculino Principal</a>
-                <a href="index.php?team=feminino#equipes" class="tab-btn <?= $teamFilter === 'feminino' ? 'active' : '' ?>">Feminino Principal</a>
-                <!--<a href="index.php#equipes?team=timedeescolha" class="tab-btn">Comissão Técnica</a> //adicionar-->
+                <?php foreach ($equipesDisponiveis as $equipe): ?>
+                    <a href="index.php?team=<?= urlencode($equipe['t_name']) ?>#equipes" class="tab-btn <?= $teamFilter === $equipe['t_name'] ? 'active' : '' ?>">
+                        <?= htmlspecialchars($equipe['t_name']) ?>
+                    </a>
+                <?php endforeach; ?>
             </div>
 
             <div class="players-grid">

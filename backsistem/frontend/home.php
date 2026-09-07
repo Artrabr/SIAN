@@ -31,6 +31,14 @@
                 <strong>Listas</strong>
                 <span>Consulte os atletas já cadastrados.</span>
             </a>
+            <a href="teams.php" class="action-card">
+                <strong>Times</strong>
+                <span>Consulte capacidade e status das equipes.</span>
+            </a>
+            <a href="teamRegistration.php" class="action-card">
+                <strong>Novo time</strong>
+                <span>Cadastre uma nova equipe.</span>
+            </a>
         </section>
     </main>
 
@@ -42,6 +50,8 @@
         <a href="news.php"><i class="fa-solid fa-newspaper"></i></a>
         <a href="newsConfig.php"><i class="fa-brands fa-leanpub"></i></a>
         <a href="authorization.php"><i class="fa-solid fa-user-gear"></i></a>
+        <a href="teamRegistration.php"><i class="fa-solid fa-arrows-down-to-people"></i></a>
+        <a href="teams.php"><i class="fa-solid fa-people-group"></i></a>
     </nav>
 </body>
 </html>
