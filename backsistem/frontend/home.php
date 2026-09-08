@@ -11,34 +11,87 @@
     <header class="topbar">
         <img src="style/logo-sian.png" alt="Logo SIAN" class="logo">
         <div>
-            <h1>SIAN - Sistema Interno Administrativo Noia</h1>
+            <h1>SIAN</h1>
             <p>Painel principal</p>
         </div>
     </header>
 
     <main class="content-card">
-        <section class="hero-card">
-            <h2>Gerencie atletas com praticidade</h2>
-            <p>Cadastre novos jogadores, acompanhe listas e mantenha tudo em um só lugar.</p>
+        <section class="home-hero">
+            <div class="hero-copy">
+                <span class="eyebrow">Painel administrativo</span>
+                <h2>Bem-vindo ao SIAN</h2>
+                <p>Gerencie atletas, times e movimentações do clube em um só lugar.</p>
+            </div>
         </section>
 
-        <section class="action-grid">
-            <a href="registration.php" class="action-card primary">
-                <strong>Novo atleta</strong>
-                <span>Cadastre um jogador rapidamente.</span>
-            </a>
-            <a href="lists.php" class="action-card">
-                <strong>Listas</strong>
-                <span>Consulte os atletas já cadastrados.</span>
-            </a>
-            <a href="teams.php" class="action-card">
-                <strong>Times</strong>
-                <span>Consulte capacidade e status das equipes.</span>
-            </a>
-            <a href="teamRegistration.php" class="action-card">
-                <strong>Novo time</strong>
-                <span>Cadastre uma nova equipe.</span>
-            </a>
+        <section class="stats-grid">
+            <article class="stat-tile">
+                <small>Atletas</small>
+                <strong>128</strong>
+                <span>+6 este mês</span>
+            </article>
+            <article class="stat-tile">
+                <small>Times</small>
+                <strong>08</strong>
+                <span>02 em foco</span>
+            </article>
+            <article class="stat-tile">
+                <small>Pagamentos</small>
+                <strong>94%</strong>
+                <span>8 pendentes</span>
+            </article>
+        </section>
+
+        <section class="home-panel">
+            <div class="panel-header">
+                <h3>Atalhos rápidos</h3>
+                <a href="lists.php">Ver tudo</a>
+            </div>
+
+            <div class="action-grid home-grid">
+                <a href="registration.php" class="action-card primary">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <strong>Novo atleta</strong>
+                    <span>Cadastre um jogador rapidamente.</span>
+                </a>
+                <a href="lists.php" class="action-card">
+                    <i class="fa-solid fa-list"></i>
+                    <strong>Listas</strong>
+                    <span>Consulte os atletas já cadastrados.</span>
+                </a>
+                <a href="teams.php" class="action-card">
+                    <i class="fa-solid fa-people-group"></i>
+                    <strong>Times</strong>
+                    <span>Consulte capacidade e status das equipes.</span>
+                </a>
+                <a href="teamRegistration.php" class="action-card">
+                    <i class="fa-solid fa-arrows-down-to-people"></i>
+                    <strong>Novo time</strong>
+                    <span>Cadastre uma nova equipe.</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="home-panel">
+            <div class="panel-header">
+                <h3>Resumo do dia</h3>
+            </div>
+
+            <div class="mini-list">
+                <div class="mini-item">
+                    <span class="mini-label">Cadastro</span>
+                    <strong>3 novos atletas hoje</strong>
+                </div>
+                <div class="mini-item">
+                    <span class="mini-label">Equipe</span>
+                    <strong>Time feminino atualizado</strong>
+                </div>
+                <div class="mini-item">
+                    <span class="mini-label">Pagamento</span>
+                    <strong>2 mensalidades pendentes</strong>
+                </div>
+            </div>
         </section>
     </main>
 
