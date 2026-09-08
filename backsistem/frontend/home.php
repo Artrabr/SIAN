@@ -1,3 +1,19 @@
+<?php
+require_once __DIR__ . "/../backend/data/conection.php";
+
+function getTotalAthletes($pdo){
+    $stmt = $pdo->query("SELECT COUNT(*) AS total FROM athlete");
+    $resultado = $stmt->fetch();
+    return $resultado['total'];
+}
+
+function getTotalTeams($pdo){
+    $stmt = $pdo->query("SELECT COUNT(*) AS total FROM teams");
+    $resultado = $stmt->fetch();
+    return $resultado['total'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -25,21 +41,34 @@
             </div>
         </section>
 
+        <?php
+        //==================================
+        //         pega os valores
+        //==================================
+        
+        $pdo = conection::conectar();
+        
+        $totalAthletes = getTotalAthletes($pdo);
+        $totalTeams    = getTotalTeams($pdo);
+        
+        $pdo = null;
+        ?>
+        
         <section class="stats-grid">
             <article class="stat-tile">
                 <small>Atletas</small>
-                <strong>128</strong>
-                <span>+6 este mês</span>
+                <strong><?=$totalAthletes?></strong>
+                <span>cadastrados</span> <!--isso pode expor a quantidade q entra por mes na proxima aatualizacao-->
             </article>
             <article class="stat-tile">
                 <small>Times</small>
-                <strong>08</strong>
+                <strong><?=$totalTeams?></strong>
                 <span>02 em foco</span>
             </article>
             <article class="stat-tile">
                 <small>Pagamentos</small>
-                <strong>94%</strong>
-                <span>8 pendentes</span>
+                <strong>?php%</strong>
+                <span>&lt;?php?&gt; pendentes</span>
             </article>
         </section>
 
@@ -53,22 +82,22 @@
                 <a href="registration.php" class="action-card primary">
                     <i class="fa-solid fa-user-plus"></i>
                     <strong>Novo atleta</strong>
-                    <span>Cadastre um jogador rapidamente.</span>
+                    <span>Cadastre um jogador rapidamente</span>
                 </a>
                 <a href="lists.php" class="action-card">
                     <i class="fa-solid fa-list"></i>
                     <strong>Listas</strong>
-                    <span>Consulte os atletas já cadastrados.</span>
+                    <span>Consulte os atletas já cadastrados</span>
                 </a>
                 <a href="teams.php" class="action-card">
                     <i class="fa-solid fa-people-group"></i>
                     <strong>Times</strong>
-                    <span>Consulte capacidade e status das equipes.</span>
+                    <span>Consulte capacidade e status das equipes</span>
                 </a>
                 <a href="teamRegistration.php" class="action-card">
                     <i class="fa-solid fa-arrows-down-to-people"></i>
                     <strong>Novo time</strong>
-                    <span>Cadastre uma nova equipe.</span>
+                    <span>Cadastre uma nova equipe</span>
                 </a>
             </div>
         </section>
@@ -81,15 +110,15 @@
             <div class="mini-list">
                 <div class="mini-item">
                     <span class="mini-label">Cadastro</span>
-                    <strong>3 novos atletas hoje</strong>
+                    <strong>&lt;?php?&gt; novos atletas hoje</strong>
                 </div>
                 <div class="mini-item">
                     <span class="mini-label">Equipe</span>
-                    <strong>Time feminino atualizado</strong>
+                    <strong>Time &lt;?php?&gt; atualizado</strong>
                 </div>
                 <div class="mini-item">
                     <span class="mini-label">Pagamento</span>
-                    <strong>2 mensalidades pendentes</strong>
+                    <strong>&lt;?php?&gt; mensalidades pendentes</strong>
                 </div>
             </div>
         </section>
