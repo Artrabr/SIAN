@@ -102,7 +102,7 @@ $equipes = $stmt->fetchAll();
                         <div class="summary-meta">
                             <span><?= $genero ?></span>
                             <span><?= htmlspecialchars($capacidade) ?></span>
-                            <span><?= $descricao ?></span>
+                            <p class="team-description"><?= $descricao ?></p>
                         </div>
                     </label>
 

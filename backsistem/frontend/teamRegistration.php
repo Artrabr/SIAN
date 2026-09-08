@@ -26,7 +26,7 @@ $error = $_GET['error'] ?? '';
             <textarea id="description" name="description" maxlength="400"></textarea>
 
             <label for="maxCapacity">Capacidade máxima:</label>
-            <input id="maxCapacity" name="maxCapacity" type="number" min="1">
+            <input id="maxCapacity" name="maxCapacity" type="number" min="1" max="5000">
 
             <label for="gender">Categoria:</label>
             <select id="gender" name="gender" required>
