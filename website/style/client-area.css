@@ -177,6 +177,18 @@ body.client-page {
     border-color: var(--border-cyan);
 }
 
+.community-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.community-link:hover,
+.community-link:focus-visible {
+    color: inherit;
+    text-decoration: none;
+}
+
 .metric-card {
     min-height: 155px;
     display: flex;

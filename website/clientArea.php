@@ -173,11 +173,55 @@ require_once __DIR__ . '/process/columProjection.php';
                 </div>
             </section>
 
+            <section class="client-panel" id="links" role="tabpanel" aria-labelledby="tab-links" hidden>
+                <div class="section-header compact-header">
+                    <div>
+                        <h2 class="section-title">Grupos</h2>
+                        <p class="section-subtitle">Todos os links de comunidade do NOIA Vôlei</p>
+                        <p class="section-subtitle"><span>Recomendado entrar</span></p>
+                    </div>
+                </div>
+                <a href="https://chat.whatsapp.com/ELkaA0SzIWkEY0MJoDvxKk" class="community-link">
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-12 col-lg-8">
+                        <article class="client-card profile-details">
+                            <div class="detail-line"><span>Nome: </span><strong>Grupo de avisos</strong></div>
+                            <div class="detail-line"><span>descrição: </span><strong>Avisos oficiais e exclusivos da equipe</strong></div>
+                            <div class="detail-line"><span>Equipe</span><strong>Todas</strong></div>
+                        </article>
+                    </div>
+                </div>
+                </a>
+                <a href="https://chat.whatsapp.com/ELkaA0SzIWkEY0MJoDvxKk" class="community-link">
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-12 col-lg-8">
+                        <article class="client-card profile-details">
+                            <div class="detail-line"><span>Nome: </span><strong>Masculino</strong></div>
+                            <div class="detail-line"><span>descrição: </span><strong>Comunidade da equipe masculina</strong></div>
+                            <div class="detail-line"><span>Equipe</span><strong>Homens</strong></div>
+                        </article>
+                    </div>
+                </div>
+                </a>
+                <a href="https://chat.whatsapp.com/ELkaA0SzIWkEY0MJoDvxKk" class="community-link">
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-12 col-lg-8">
+                        <article class="client-card profile-details">
+                            <div class="detail-line"><span>Nome: </span><strong>Feminino</strong></div>
+                            <div class="detail-line"><span>descrição: </span><strong>Comunidade da equipe feminina</strong></div>
+                            <div class="detail-line"><span>Equipe</span><strong>Mulheres</strong></div>
+                        </article>
+                    </div>
+                </div>
+                </a>
+            </section>
+
             <nav class="client-tabs" role="tablist" aria-label="Seções da área do cliente">
                 <button class="client-tab active" id="tab-inicio" role="tab" aria-selected="true" aria-controls="inicio" data-tab="inicio"><span aria-hidden="true">⌂</span><span>Início</span></button>
                 <button class="client-tab" id="tab-perfil" role="tab" aria-selected="false" aria-controls="perfil" data-tab="perfil"><span aria-hidden="true">◎</span><span>Perfil</span></button>
                 <button class="client-tab" id="tab-equipe" role="tab" aria-selected="false" aria-controls="equipe" data-tab="equipe"><span aria-hidden="true">♧</span><span>Equipe</span></button>
-                <button class="client-tab" id="tab-pagamentos" role="tab" aria-selected="false" aria-controls="pagamentos" data-tab="pagamentos"><span aria-hidden="true">$</span><span>Pagamentos</span></button>
+                <button class="client-tab" id="tab-pagamentos" role="tab" aria-selected="false" aria-controls="pagamentos" data-tab="pagamentos"><span aria-hidden="true">$</span><span>Pagar</span></button>
+                <button class="client-tab" id="tab-links" role="tab" aria-selected="false" aria-controls="links" data-tab="links"><span aria-hidden="true">↪</span><span>Links</span></button>
             </nav>
         </div>
     </main>
