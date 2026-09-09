@@ -100,7 +100,7 @@ require_once __DIR__ . '/process/columProjection.php';
                             <div class="detail-line"><span>Posição</span><strong><?= htmlspecialchars($atleta['posicao']) ?></strong></div>
                             <div class="detail-line"><span>Equipe</span><strong><?= htmlspecialchars($atleta['equipe']) ?></strong></div>
                             <div class="detail-line"><span>Instagram</span><strong><?= htmlspecialchars($atleta['instagram']) ?></strong></div>
-                            <a href="#" class="btn-login password-button">Alterar senha</a>
+                            <!--<a href="#" class="btn-login password-button">Alterar senha</a>-->
                         </article>
                     </div>
                 </div>
