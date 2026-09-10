@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../backend/data/conection.php";
+require_once __DIR__ . "/../backend/classes/paymentprocess.php";
 
 function getTotalAthletes($pdo){
     $stmt = $pdo->query("SELECT COUNT(*) AS total FROM athlete");
@@ -47,10 +48,16 @@ function getTotalTeams($pdo){
         //==================================
         
         $pdo = conection::conectar();
-        
+
+        $sql = "SELECT id_atl FROM athlete";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $athletesId = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
         $totalAthletes = getTotalAthletes($pdo);
-        $totalTeams    = getTotalTeams($pdo);
-        
+        $totalTeams = getTotalTeams($pdo);
+        $totalPayd = howManyPaid($pdo, $athletesId);
+
         $pdo = null;
         ?>
         
@@ -63,11 +70,11 @@ function getTotalTeams($pdo){
             <article class="stat-tile">
                 <small>Times</small>
                 <strong><?=$totalTeams?></strong>
-                <span>02 em foco</span>
+                <!--<span>02 em foco</span>-->
             </article>
             <article class="stat-tile">
                 <small>Pagamentos</small>
-                <strong>?php%</strong>
+                <strong><?=$totalPayd?></strong>
                 <span>&lt;?php?&gt; pendentes</span>
             </article>
         </section>
