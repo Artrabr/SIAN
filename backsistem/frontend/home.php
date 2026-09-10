@@ -57,6 +57,7 @@ function getTotalTeams($pdo){
         $totalAthletes = getTotalAthletes($pdo);
         $totalTeams = getTotalTeams($pdo);
         $totalPayd = howManyPaid($pdo, $athletesId);
+        $totalPending = max(0, count($athletesId) - $totalPayd);
 
         $pdo = null;
         ?>
@@ -70,12 +71,12 @@ function getTotalTeams($pdo){
             <article class="stat-tile">
                 <small>Times</small>
                 <strong><?=$totalTeams?></strong>
-                <!--<span>02 em foco</span>-->
+                <span>No total</span>
             </article>
             <article class="stat-tile">
                 <small>Pagamentos</small>
                 <strong><?=$totalPayd?></strong>
-                <span>&lt;?php?&gt; pendentes</span>
+                <span><?=$totalPending?> pendentes</span>
             </article>
         </section>
 
@@ -117,15 +118,15 @@ function getTotalTeams($pdo){
             <div class="mini-list">
                 <div class="mini-item">
                     <span class="mini-label">Cadastro</span>
-                    <strong>&lt;?php?&gt; novos atletas hoje</strong>
+                    <strong><?=$totalAthletes?> atletas</strong>
                 </div>
                 <div class="mini-item">
                     <span class="mini-label">Equipe</span>
-                    <strong>Time &lt;?php?&gt; atualizado</strong>
+                    <strong>Times <?=$totalTeams?> no total</strong>
                 </div>
                 <div class="mini-item">
                     <span class="mini-label">Pagamento</span>
-                    <strong>&lt;?php?&gt; mensalidades pendentes</strong>
+                    <strong><?=$totalPending?> mensalidades pendentes</strong>
                 </div>
             </div>
         </section>
